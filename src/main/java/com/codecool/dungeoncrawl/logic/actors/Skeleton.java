@@ -20,7 +20,7 @@ public class Skeleton extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
-                combat(nextCell.getActor());
+                super.combat(nextCell.getActor());
                 return;
             }
             cell.setActor(null);
@@ -29,8 +29,4 @@ public class Skeleton extends Actor {
         }
     }
 
-    public void combat(Actor enemy) {
-        enemy.damageHealth(super.getDamage());
-        damageHealth(enemy.getDamage());
-    }
 }

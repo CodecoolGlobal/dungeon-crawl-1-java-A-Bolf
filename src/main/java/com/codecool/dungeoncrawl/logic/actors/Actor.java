@@ -58,5 +58,8 @@ public abstract class Actor implements Drawable {
         return cell.getY();
     }
 
-    protected abstract void combat(Actor monster);
+    protected void combat(Actor enemy){
+        enemy.damageHealth(damage);
+        damageHealth(enemy.getDamage());
+    }
 }

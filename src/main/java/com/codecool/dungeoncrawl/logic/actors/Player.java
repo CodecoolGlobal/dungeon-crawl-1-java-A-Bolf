@@ -22,7 +22,7 @@ public class Player extends Actor implements CanPickupItems {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
-                combat(nextCell.getActor());
+                super.combat(nextCell.getActor());
                 return;
             }
             if (nextCell.hasItem()) {
@@ -35,10 +35,6 @@ public class Player extends Actor implements CanPickupItems {
         }
     }
 
-    public void combat(Actor enemy) {
-        enemy.damageHealth(super.getDamage());
-        damageHealth(enemy.getDamage());
-    }
 
     public void pickUpItem(Cell cell) {
         Item item = cell.getItem();
