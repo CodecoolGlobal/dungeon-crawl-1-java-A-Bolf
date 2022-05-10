@@ -8,6 +8,7 @@ public class Weapon extends Item{
     public Weapon(Cell cell) {
         super(cell);
         super.type=ItemType.SWORD;
+        super.name="Sword";
     }
 
     @Override

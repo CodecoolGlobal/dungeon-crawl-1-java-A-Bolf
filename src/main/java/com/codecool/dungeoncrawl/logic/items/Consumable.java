@@ -8,6 +8,7 @@ public class Consumable extends Item{
     public Consumable(Cell cell) {
         super(cell);
         super.type=ItemType.FOOD;
+        super.name="apple";
     }
 
     @Override
