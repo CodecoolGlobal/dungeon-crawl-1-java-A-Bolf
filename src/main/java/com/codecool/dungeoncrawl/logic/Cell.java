@@ -8,6 +8,7 @@ public class Cell implements Drawable {
     private Actor actor;
     private Item item;
     private GameMap gameMap;
+    private DoorType doorStatus;
     private int x, y;
 
     Cell(GameMap gameMap, int x, int y, CellType type) {
@@ -15,7 +16,11 @@ public class Cell implements Drawable {
         this.x = x;
         this.y = y;
         this.type = type;
+        if (type == CellType.DOOR) {
+            doorStatus = DoorType.CLOSED;
+        }
     }
+
 
     public Item getItem() {
         return item;
@@ -27,6 +32,9 @@ public class Cell implements Drawable {
 
     public void setType(CellType type) {
         this.type = type;
+        if (type == CellType.DOOR) {
+            doorStatus = DoorType.CLOSED;
+        }
     }
 
     public void setActor(Actor actor) {
@@ -43,6 +51,9 @@ public class Cell implements Drawable {
 
     @Override
     public String getTileName() {
+        if (type == CellType.DOOR) {
+            return doorStatus.getTileName();
+        }
         return type.getTileName(this);
     }
 
@@ -53,8 +64,9 @@ public class Cell implements Drawable {
 
     public void removeItem() {
         this.item = null;
-        this.type= CellType.FLOOR;
+        this.type = CellType.FLOOR;
     }
+
     public void setItem(Item item) {
         this.item = item;
     }
@@ -66,4 +78,5 @@ public class Cell implements Drawable {
     public int getY() {
         return y;
     }
+
 }
