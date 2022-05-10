@@ -6,7 +6,6 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -50,16 +49,29 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
+        new Thread(){
+            public void run(){
+                while (true){
+                    try {
+                        for (Skeleton skeleton :
+                                skeletons) {
+                            skeleton.moveSkeleton();
+                            refresh();
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }catch (NullPointerException ignored){}
+
+                }
+            }
+        }.start();
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-        while (true){
-            for (Skeleton skeleton :
-                    skeletons) {
-                skeleton.moveSkeleton();
-            }
-            Thread.sleep(800);
-        }
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -83,7 +95,7 @@ public class Main extends Application {
         }
     }
 
-    private void refresh() {
+    public void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
