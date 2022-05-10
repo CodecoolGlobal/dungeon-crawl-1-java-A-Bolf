@@ -10,10 +10,13 @@ public class Player extends Actor {
     public Player(Cell cell) {
         super(cell,100,5);
     }
-    private LinkedList<Item> inventory= new LinkedList<>();
+    private static LinkedList<Item> inventory= new LinkedList<>();
 
-    public void pickUpItem(Item item){
+    public static void pickUpItem(Item item){
         inventory.add(item);
+    }
+    public static LinkedList<Item> getInventory(){
+        return inventory;
     }
     public void removeItem(Item item){
         inventory.remove(item);

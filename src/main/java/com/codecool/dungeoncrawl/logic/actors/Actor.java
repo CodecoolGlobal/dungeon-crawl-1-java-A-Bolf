@@ -24,6 +24,11 @@ public abstract class Actor implements Drawable {
                 combat(nextCell.getActor());
                 return;
             }
+            if (nextCell.hasItem()) {
+                Player.pickUpItem(nextCell.getItem());
+                nextCell.removeItem();
+                System.out.println(Player.getInventory());
+            }
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
@@ -48,7 +53,7 @@ public abstract class Actor implements Drawable {
     }
 
     private boolean isWalkable(Cell cell) {
-        return cell.getType() == CellType.FLOOR;
+        return cell.getType() == CellType.FLOOR||cell.getType() == CellType.ITEM;
     }
 
     private boolean isAttackable(Cell cell) {
