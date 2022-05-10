@@ -5,8 +5,9 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import java.util.Random;
 
 public class Skeleton extends Actor {
+
     public Skeleton(Cell cell) {
-        super(cell);
+        super(cell,10,2);
     }
 
     private Random random = new Random();
