@@ -25,15 +25,21 @@ public abstract class Actor implements Drawable {
                 return;
             }
             if (nextCell.hasItem()) {
-                Player.pickUpItem(nextCell.getItem());
-                nextCell.removeItem();
-                System.out.println(Player.getInventory());
+                pickupItem(nextCell);
             }
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
         }
     }
+
+    private void pickupItem(Cell cell) {
+        Player.pickUpItem(cell.getItem());
+        cell.removeItem();
+        System.out.println(Player.getInventory());
+    }
+
+
 
     private void damageHealth(int damage) {
         health -= damage;
