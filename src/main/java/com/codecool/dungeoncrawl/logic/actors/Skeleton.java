@@ -18,14 +18,15 @@ public class Skeleton extends Actor {
     }
 
     public void moveSkeleton() {
-        int dx = random.nextInt(2) - 1;
+        int dx = random.nextInt(3) - 1;
         int dy;
         if (dx == 0) {
-            dy = random.nextInt(2) - 1;
+            dy = random.nextInt(3) - 1;
         } else {
             dy = 0;
         }
-        move(dx, dy);
+        moveMonster(dx, dy);
     }
+
 }
 

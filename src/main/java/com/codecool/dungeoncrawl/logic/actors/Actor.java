@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.sun.source.tree.InstanceOfTree;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
@@ -29,6 +30,15 @@ public abstract class Actor implements Drawable {
                 nextCell.removeItem();
                 System.out.println(Player.getInventory());
             }
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+        }
+    }
+
+    public void moveMonster(int dx, int dy){
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        if (nextCell.getType() == CellType.FLOOR || nextCell.getActor() instanceof Player) {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
