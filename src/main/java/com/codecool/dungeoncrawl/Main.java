@@ -34,7 +34,7 @@ public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
 
-    GameMap map = MapLoader.loadMap("/map3.txt");
+    GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -130,26 +130,37 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if(refreshVertical>0 && Player.getVertical()<map.getHeight() - 12){
-                    refreshVertical--;} // I need to calibrate with collision.
+                if(refreshVertical>0 && Player.getVertical()<map.getHeight() - 12) {
+                    if (Player.collised(0, -1)) {
+                        refreshVertical--;
+                    }
+                }
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && refreshVertical < map.getHeight()-22){
-                refreshVertical++;} // I need to calibrate with collision.
+                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && refreshVertical < map.getHeight()-22) {
+                    if (Player.collised(0, 1)) {
+                        refreshVertical++;
+                    }
+                }
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                if(refreshHorizontal>0 && Player.getHorizontal()<map.getWidth()-22){
-                    refreshHorizontal--;} // I need to calibrate with collision.
+                if(refreshHorizontal>0 && Player.getHorizontal()<map.getWidth()-22) {
+                    if (Player.collised(-1, 0)) {
+                        refreshHorizontal--;
+                    }
+                }
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
                 if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && refreshHorizontal < map.getWidth()-40){
-                    refreshHorizontal++;} // I need to calibrate with collision.
+                    if(Player.collised(1,0)){
+                        refreshHorizontal++;}
+                }
                 refresh();
                 break;
         }

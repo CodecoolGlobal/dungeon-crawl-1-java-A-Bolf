@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Player extends Actor implements CanPickupItems {
-    private Cell cell;
+    private static Cell cell;
     private static int vertical;
     private static int horizontal;
     private static ArrayList<Item> inventory = new ArrayList<>();
@@ -81,6 +81,19 @@ public class Player extends Actor implements CanPickupItems {
         consumables.clear();
     }
 
+
+
+    public static boolean collised(int dx, int dy) {
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        if (nextCell.isWalkable()) {
+            if (nextCell.isAttackable()) {
+                return false;
+            }
+           return true;
+        }
+        return false;
+    }
+
     public String getTileName() {
         return "player";
     }
@@ -92,5 +105,8 @@ public class Player extends Actor implements CanPickupItems {
     public static int getVertical() {
         return vertical;
     }
+
+
+
 
 }
