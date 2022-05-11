@@ -81,23 +81,12 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), actionEvent -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), actionEvent -> {
             moveAllMonster();
             System.out.println("Running thread monster");
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
-        /*Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() ->{
-                    moveAllSkeleton();
-                });
-            }
-        },500,500);*/
-
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();

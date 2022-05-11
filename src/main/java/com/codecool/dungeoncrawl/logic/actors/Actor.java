@@ -3,7 +3,6 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
-import com.sun.source.tree.InstanceOfTree;
 
 public abstract class Actor implements Drawable {
     protected Cell cell;
@@ -40,6 +39,10 @@ public abstract class Actor implements Drawable {
         if (health <= 0) {
             die();
         }
+    }
+
+    public void getCloserToActor(Actor actor){
+
     }
 
     private void die() {

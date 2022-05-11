@@ -23,7 +23,7 @@ public class Skeleton extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
-                super.combat(nextCell.getActor());
+                nextCell.getActor().damageHealth(getDamage());
                 return;
             }
             cell.setActor(null);
