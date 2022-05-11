@@ -30,6 +30,9 @@ public class Tiles {
         tileMap.put("shrine", new Tile(2, 14));
         tileMap.put("ladder", new Tile(21, 1));
         tileMap.put("hole", new Tile(17, 17));
+        tileMap.put("sword", new Tile(5,5));
+        tileMap.put("food", new Tile(11,11));
+        tileMap.put("ogre", new Tile(30, 6));
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
@@ -37,7 +40,4 @@ public class Tiles {
         context.drawImage(tileset, tile.x, tile.y, tile.w, tile.h,
                 x * TILE_WIDTH, y * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH);
     }
-
-
-
 }

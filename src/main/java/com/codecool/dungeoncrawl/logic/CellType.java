@@ -6,6 +6,7 @@ public enum CellType {
     WALL("wall"),
     SHRINE("shrine"),
     LADDER("ladder"),
+    ITEM("item"),
     HOLE("hole");
 
     private final String tileName;
@@ -14,7 +15,9 @@ public enum CellType {
         this.tileName = tileName;
     }
 
-    public String getTileName() {
+    public String getTileName(Cell cell) {
+        if (tileName=="item")
+            return cell.getItem().getTileName();
         return tileName;
     }
 }
