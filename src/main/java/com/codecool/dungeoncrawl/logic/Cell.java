@@ -35,6 +35,9 @@ public class Cell implements Drawable {
             doorStatus = DoorType.CLOSED;
         }
     }
+    public void setDoorStatus(DoorType doorStatus) {
+        this.doorStatus = doorStatus;
+    }
 
     public void setActor(Actor actor) {
         this.actor = actor;
@@ -81,7 +84,7 @@ public class Cell implements Drawable {
 
 
     public boolean isWalkable() {
-        return type == CellType.FLOOR || type == CellType.ITEM;
+        return type == CellType.FLOOR || type == CellType.ITEM|| type == CellType.DOOR;
     }
     public boolean isAttackable() {
         return actor != null;
