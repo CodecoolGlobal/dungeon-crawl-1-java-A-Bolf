@@ -155,4 +155,10 @@ public class Main extends Application {
         }
         updateLabels();
     }
+
+    private void updateLabels() {
+        healthLabel.setText("" + map.getPlayer().getHealth());
+        damageLabel.setText(map.getPlayer().getDamage() + "");
+        inventoryLabel.setText(Player.getInventoryContents());
+    }
 }
