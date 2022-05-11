@@ -4,6 +4,9 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.swing.*;
 
@@ -28,48 +32,90 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
-    Label inventoryLabel=new Label();
+    Label damageLabel = new Label();
+    Label inventoryLabel = new Label();
+    private GridPane ui = new GridPane();
+    private BorderPane borderPane = new BorderPane();
+    Button btn;
 
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    private void initPickupButton() {
+        btn = new Button("Pick Up Item");
+        btn.setFocusTraversable(false);
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            map.getPlayer().pickUpItem(map.getPlayer().getCell());
+            updateLabels();
+            ui.getChildren().remove(btn);
+            borderPane.requestFocus();
+        });
+    }
+
+    private void buttonDisplay() {
+        Cell cell = map.getPlayer().getCell();
+        System.out.println("Cell: " + cell);
+        if (cell.hasItem()) {
+            ui.add(btn, 0, 10);
+            btn.setVisible(true);
+            System.out.println("Button SHOW");
+        } else {
+            System.out.println("Button attempt to HIDE");
+            try {
+                btn.setVisible(false);
+                ui.getChildren().remove(btn);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        System.out.println(ui.getChildren());
+
+
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane ui = new GridPane();
-        GridPane buttonPane = new GridPane();
-        Button btn = new Button("Pick Up Item");
+        initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
-
         ui.add(new Label("Health: "), 0, 0);
-        ui.add(btn, 0, 10);
+        ui.add(new Label("Inventory:"), 0, 2);
+        ui.add(inventoryLabel, 1, 2);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("Damage:"), 0, 1);
+        ui.add(damageLabel, 1, 1);
 
-        ui.add(new Label("Inventory:"),0,1);
-        ui.add(inventoryLabel,1,1);
 
-
-        BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
 
         borderPane.setBottom(ui);
-        borderPane.setRight(ui);
-        borderPane.setBottom(buttonPane);
-        ui.setAlignment(Pos.BOTTOM_RIGHT);
+//        borderPane.setRight(ui);
+//        borderPane.setBottom(buttonPane);
+        ui.setAlignment(Pos.BOTTOM_LEFT);
 
 
         Scene scene = new Scene(borderPane);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {System.out.println("Clicked");borderPane.requestFocus();});
+
         primaryStage.setScene(scene);
         refresh();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), actionEvent -> {
+
+        }));
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
         scene.setOnKeyPressed(this::onKeyPressed);
+
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
     }
+
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
@@ -93,6 +139,8 @@ public class Main extends Application {
     }
 
     private void refresh() {
+        buttonDisplay();
+        borderPane.requestFocus();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (int x = 0; x < map.getWidth(); x++) {
@@ -105,8 +153,6 @@ public class Main extends Application {
                 }
             }
         }
-        healthLabel.setText("" + map.getPlayer().getHealth());
-//        inventoryLabel.setMaxWidth(200);
-        inventoryLabel.setText("<html><p style=\"width:100px \">"+Player.getInventoryContents()+"</p></html>");
+        updateLabels();
     }
 }
