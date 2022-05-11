@@ -10,9 +10,18 @@ import java.util.LinkedList;
 
 public class Player extends Actor implements CanPickupItems {
     private Cell cell;
+    private static int vertical;
+    private static int horizontal;
     private static ArrayList<Item> inventory = new ArrayList<>();
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();
+
+    public Player(Cell cell,int vertical,int horizontal) {
+        super(cell, 100, 5);
+        this.cell = cell;
+        this.vertical = vertical;
+        this.horizontal = horizontal;
+    }
 
     public Player(Cell cell) {
         super(cell, 100, 5);
@@ -34,6 +43,8 @@ public class Player extends Actor implements CanPickupItems {
             nextCell.setActor(this);
             cell = nextCell;
             super.cell = nextCell;
+            vertical=vertical+dy;
+            horizontal=horizontal+dx;
         }
     }
 
@@ -73,4 +84,13 @@ public class Player extends Actor implements CanPickupItems {
     public String getTileName() {
         return "player";
     }
+
+    public static int getHorizontal() {
+        return horizontal;
+    }
+
+    public static int getVertical() {
+        return vertical;
+    }
+
 }

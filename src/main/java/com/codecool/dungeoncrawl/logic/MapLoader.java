@@ -13,16 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
-    private static int starterHorizontal;
-    private static int starterVertical;
 
-    public static int getStarterHorizontal() {
-        return starterHorizontal;
-    }
-
-    public static int getStarterVertical() {
-        return starterVertical;
-    }
     public static List<Skeleton> getSkeletons() {
         return skeletons;
     }
@@ -66,9 +57,7 @@ public class MapLoader {
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            starterVertical = y;
-                            starterHorizontal = x;
-                            map.setPlayer(new Player(cell));
+                            map.setPlayer(new Player(cell,y,x));
                             break;
                         case 'F':
                             cell.setType(CellType.ITEM);
@@ -86,6 +75,7 @@ public class MapLoader {
                             break;
                         case 'h':
                             cell.setType(CellType.HOLE);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }
