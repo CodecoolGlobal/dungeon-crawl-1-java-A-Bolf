@@ -6,10 +6,11 @@ import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Player extends Actor implements CanPickupItems {
     private Cell cell;
-    private ArrayList<Item> inventory = new ArrayList<>();
+    private static ArrayList<Item> inventory = new ArrayList<>();
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();
 
@@ -35,7 +36,6 @@ public class Player extends Actor implements CanPickupItems {
             super.cell = nextCell;
         }
     }
-    private static LinkedList<Item> inventory= new LinkedList<>();
 
     public static String getInventoryContents(){
         String ret ="";

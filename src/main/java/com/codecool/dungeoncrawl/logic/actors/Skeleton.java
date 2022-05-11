@@ -23,8 +23,6 @@ public class Skeleton extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
-                System.out.println("Hit the actor "+nextCell.getActor());
-                System.out.println("I'm "+cell.getActor());
                 super.combat(nextCell.getActor());
                 return;
             }

@@ -13,7 +13,6 @@ import javafx.animation.Timeline;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,7 +20,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -31,10 +29,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.swing.*;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -73,8 +67,8 @@ public class Main extends Application {
         borderPane.setCenter(canvas);
 
         borderPane.setBottom(ui);
-        borderPane.setRight(ui);
-        borderPane.setBottom(buttonPane);
+        /*borderPane.setRight(ui);
+        borderPane.setBottom(buttonPane);*/
         ui.setAlignment(Pos.BOTTOM_RIGHT);
 
 
@@ -88,8 +82,8 @@ public class Main extends Application {
         scene.setOnKeyPressed(this::onKeyPressed);
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), actionEvent -> {
-            moveAllSkeleton();
-            System.out.println("Running thread");
+            moveAllMonster();
+            System.out.println("Running thread monster");
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -110,12 +104,7 @@ public class Main extends Application {
         borderPane.requestFocus();
     }
 
-    private void moveAllSkeleton() {
-        System.out.println("#####-------------------------");
-        System.out.println(skeletons);
-        System.out.println("------------------------------");
-        System.out.println(ogres);
-        System.out.println("------------------------------");
+    private void moveAllMonster() {
         for (Skeleton skeleton :
                 skeletons) {
             if (skeleton.getCell() != null){
@@ -126,12 +115,11 @@ public class Main extends Application {
         for (Ogre ogre :
                 ogres) {
             if (ogre.getCell() != null) {
-                System.out.println(map.getPlayer().getCell().getX());
                 ogre.chasePlayer(map.getPlayer());
             }
         }
         refresh();
-        System.out.println("Running task");
+
 
 
     }
