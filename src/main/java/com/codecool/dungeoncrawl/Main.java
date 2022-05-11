@@ -6,11 +6,14 @@ import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -35,12 +38,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         GridPane ui = new GridPane();
+        GridPane buttonPane = new GridPane();
+        Button btn = new Button("Pick Up Item");
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
 
-
-
         ui.add(new Label("Health: "), 0, 0);
+        ui.add(btn, 0, 10);
         ui.add(healthLabel, 1, 0);
 
         ui.add(new Label("Inventory:"),0,1);
@@ -48,17 +52,23 @@ public class Main extends Application {
 
 
         BorderPane borderPane = new BorderPane();
-
         borderPane.setCenter(canvas);
+
         borderPane.setBottom(ui);
+        borderPane.setRight(ui);
+        borderPane.setBottom(buttonPane);
+        ui.setAlignment(Pos.BOTTOM_RIGHT);
+
 
         Scene scene = new Scene(borderPane);
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {System.out.println("Clicked");borderPane.requestFocus();});
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        borderPane.requestFocus();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -76,7 +86,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1,0);
+                map.getPlayer().move(1, 0);
                 refresh();
                 break;
         }

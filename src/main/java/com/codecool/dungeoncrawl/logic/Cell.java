@@ -47,11 +47,18 @@ public class Cell implements Drawable {
     }
 
 
-    public boolean hasItem(){
-        return this.item!=null;
+    public boolean hasItem() {
+        return this.item != null;
     }
 
-    public void setItem(Item item){this.item=item;}
+    public void removeItem() {
+        this.item = null;
+        this.type = CellType.FLOOR;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     public int getX() {
         return x;
@@ -59,5 +66,13 @@ public class Cell implements Drawable {
 
     public int getY() {
         return y;
+    }
+
+
+    public boolean isWalkable() {
+        return type == CellType.FLOOR || type == CellType.ITEM;
+    }
+    public boolean isAttackable() {
+        return actor != null;
     }
 }

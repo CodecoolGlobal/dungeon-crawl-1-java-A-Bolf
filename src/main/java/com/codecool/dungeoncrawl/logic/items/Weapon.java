@@ -10,7 +10,9 @@ public class Weapon extends Item{
         super.type=ItemType.SWORD;
         super.name="Sword";
     }
-
+ public int getDamage(){
+        return damage;
+    }
     @Override
     public String getTileName() {
         return "sword";

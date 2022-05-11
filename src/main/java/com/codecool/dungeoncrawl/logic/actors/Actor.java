@@ -5,18 +5,41 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
-    private int health = 10;
+    private int health;
+    private int damage;
 
-    public Actor(Cell cell) {
+    public Actor(Cell cell, int health, int damage) {
         this.cell = cell;
         this.cell.setActor(this);
+        this.health = health;
+        this.damage = damage;
+
+    }
+    public abstract void move(int dx, int dy);
+
+    protected void damageHealth(int damage) {
+
+        health -= damage;
+        if (health <= 0) {
+            die();
+        }
     }
 
-    public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
+    private void die() {
         cell.setActor(null);
-        nextCell.setActor(this);
-        cell = nextCell;
+        cell = null;
+    }
+
+    public void increaseDamage(int damage) {
+        this.damage += damage;
+    }
+
+    public void increaseHealth(int health) {
+        this.health += health;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     public int getHealth() {
@@ -33,5 +56,10 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    protected void combat(Actor enemy){
+        enemy.damageHealth(damage);
+        damageHealth(enemy.getDamage());
     }
 }
