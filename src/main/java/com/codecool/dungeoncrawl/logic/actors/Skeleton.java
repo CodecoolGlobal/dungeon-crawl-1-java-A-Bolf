@@ -23,12 +23,15 @@ public class Skeleton extends Actor {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
+                System.out.println("Hit the actor "+nextCell.getActor());
+                System.out.println("I'm "+cell.getActor());
                 super.combat(nextCell.getActor());
                 return;
             }
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+            super.cell = nextCell;
         }
     }
     public void moveSkeleton() {
@@ -39,6 +42,9 @@ public class Skeleton extends Actor {
         } else {
             dy = 0;
         }
-        moveMonster(dx, dy);
+        if (dy != 0 || dx != 0){
+            move(dx, dy);
+        }
+
     }
 }

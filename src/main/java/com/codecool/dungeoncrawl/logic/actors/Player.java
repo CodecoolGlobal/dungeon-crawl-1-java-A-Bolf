@@ -32,6 +32,7 @@ public class Player extends Actor implements CanPickupItems {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+            super.cell = nextCell;
         }
     }
 

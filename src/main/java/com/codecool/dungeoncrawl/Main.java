@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -61,7 +62,10 @@ public class Main extends Application {
         ui.setAlignment(Pos.BOTTOM_RIGHT);
 
         Scene scene = new Scene(borderPane);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {System.out.println("Clicked");borderPane.requestFocus();});
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            System.out.println("Clicked");
+            borderPane.requestFocus();
+        });
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
@@ -97,13 +101,19 @@ public class Main extends Application {
         System.out.println("------------------------------");
         for (Skeleton skeleton :
                 skeletons) {
-
-            for (Ogre ogre :
-                    ogres) {
-
+            if (skeleton.getCell() != null){
+                skeleton.moveSkeleton();
             }
-            refresh();
+
         }
+        for (Ogre ogre :
+                ogres) {
+            if (ogre.getCell() != null) {
+                System.out.println(map.getPlayer().getCell().getX());
+                ogre.chasePlayer(map.getPlayer());
+            }
+        }
+        refresh();
         System.out.println("Running task");
 
 
