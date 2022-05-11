@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
@@ -9,39 +8,17 @@ public abstract class Actor implements Drawable {
     private int health;
     private int damage;
 
-    public Actor(Cell cell,int health,int damage) {
+    public Actor(Cell cell, int health, int damage) {
         this.cell = cell;
         this.cell.setActor(this);
-        this.health=health;
-        this.damage=damage;
+        this.health = health;
+        this.damage = damage;
 
     }
+    public abstract void move(int dx, int dy);
 
-    public void move(int dx, int dy) {
-        Cell nextCell = cell.getNeighbor(dx, dy);
-        if (isWalkable(nextCell)) {
-            if (isAttackable(nextCell)) {
-                combat(nextCell.getActor());
-                return;
-            }
-            if (nextCell.hasItem()) {
-                pickupItem(nextCell);
-            }
-            cell.setActor(null);
-            nextCell.setActor(this);
-            cell = nextCell;
-        }
-    }
+    protected void damageHealth(int damage) {
 
-    private void pickupItem(Cell cell) {
-        Player.pickUpItem(cell.getItem());
-        cell.removeItem();
-        System.out.println(Player.getInventory());
-    }
-
-
-
-    private void damageHealth(int damage) {
         health -= damage;
         if (health <= 0) {
             die();
@@ -53,19 +30,13 @@ public abstract class Actor implements Drawable {
         cell = null;
     }
 
-    private void combat(Actor monster) {
-        monster.damageHealth(damage);
-        damageHealth(monster.getDamage());
+    public void increaseDamage(int damage) {
+        this.damage += damage;
     }
 
-    private boolean isWalkable(Cell cell) {
-        return cell.getType() == CellType.FLOOR||cell.getType() == CellType.ITEM;
+    public void increaseHealth(int health) {
+        this.health += health;
     }
-
-    private boolean isAttackable(Cell cell) {
-        return cell.getActor() != null;
-    }
-
 
     public int getDamage() {
         return damage;
@@ -85,5 +56,10 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    protected void combat(Actor enemy){
+        enemy.damageHealth(damage);
+        damageHealth(enemy.getDamage());
     }
 }
