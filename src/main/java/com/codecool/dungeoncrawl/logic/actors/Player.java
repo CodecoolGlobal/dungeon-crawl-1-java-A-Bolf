@@ -34,6 +34,16 @@ public class Player extends Actor implements CanPickupItems {
             cell = nextCell;
         }
     }
+    private static LinkedList<Item> inventory= new LinkedList<>();
+
+    public static String getInventoryContents(){
+        String ret ="";
+        for (Item item : inventory){
+            ret+=item.toString()+" ";
+        }
+        return ret;
+    }
+
 
 
     public void pickUpItem(Cell cell) {
