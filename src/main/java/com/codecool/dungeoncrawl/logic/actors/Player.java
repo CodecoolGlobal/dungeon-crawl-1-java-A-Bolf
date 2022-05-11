@@ -4,7 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
-
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -28,6 +29,7 @@ public class Player extends Actor implements CanPickupItems {
         this.cell = cell;
     }
 
+
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
@@ -35,10 +37,7 @@ public class Player extends Actor implements CanPickupItems {
                 super.combat(nextCell.getActor());
                 return;
             }
-            if (nextCell.hasItem()) {
-                pickUpItem(nextCell);
-                nextCell.removeItem();
-            }
+
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
@@ -66,6 +65,8 @@ public class Player extends Actor implements CanPickupItems {
             weapons.add((Weapon) item);
         }
         updateStats();
+        cell.removeItem();
+
     }
 
     private void updateStats() {
