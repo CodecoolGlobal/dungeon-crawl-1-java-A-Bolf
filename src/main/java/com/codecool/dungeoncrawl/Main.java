@@ -3,20 +3,29 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -26,6 +35,7 @@ public class Main extends Application {
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     List<Skeleton> skeletons = MapLoader.getSkeletons();
+    List<Ogre> ogres = MapLoader.getOgres();
 
     public static void main(String[] args) {
         launch(args);
@@ -49,28 +59,47 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
-        new Thread(){
-            public void run(){
-                while (true){
-                    try {
-                        for (Skeleton skeleton :
-                                skeletons) {
-                            skeleton.moveSkeleton();
-                            refresh();
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }catch (NullPointerException ignored){}
 
-                }
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), actionEvent -> {
+            moveAllSkeleton();
+            System.out.println("Running thread");
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+
+        /*Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() ->{
+                    moveAllSkeleton();
+                });
             }
-        }.start();
+        },500,500);*/
+
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+
+    }
+
+    private void moveAllSkeleton() {
+        System.out.println("#####-------------------------");
+        System.out.println(skeletons);
+        System.out.println("------------------------------");
+        System.out.println(ogres);
+        System.out.println("------------------------------");
+        for (Skeleton skeleton :
+                skeletons) {
+
+            for (Ogre ogre :
+                    ogres) {
+
+            }
+            refresh();
+        }
+        System.out.println("Running task");
+
 
     }
 

@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.Main;
+import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
@@ -15,8 +16,12 @@ public class MapLoader {
     public static List<Skeleton> getSkeletons() {
         return skeletons;
     }
+    public static List<Ogre> getOgres() {
+        return ogres;
+    }
 
-    private static List<Skeleton> skeletons = new ArrayList<>();
+    private static final List<Skeleton> skeletons = new ArrayList<>();
+    private static final List<Ogre> ogres = new ArrayList<>();
     public static GameMap loadMap() {
         InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
         Scanner scanner = new Scanner(is);
@@ -45,6 +50,10 @@ public class MapLoader {
                         case 's':
                             cell.setType(CellType.FLOOR);
                             skeletons.add(new Skeleton(cell));
+                            break;
+                        case 'o':
+                            cell.setType(CellType.FLOOR);
+                            ogres.add(new Ogre(cell));
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
