@@ -12,6 +12,9 @@ import javafx.animation.Timeline;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -40,39 +43,69 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label damageLabel = new Label();
+    Label inventoryLabel = new Label();
+    private GridPane ui = new GridPane();
+    private BorderPane borderPane = new BorderPane();
+    Button btn;
     List<Skeleton> skeletons = MapLoader.getSkeletons();
     List<Ogre> ogres = MapLoader.getOgres();
-
-    Label inventoryLabel=new Label();
 
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    private void initPickupButton() {
+        btn = new Button("Pick Up Item");
+        btn.setFocusTraversable(false);
+        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            map.getPlayer().pickUpItem(map.getPlayer().getCell());
+            updateLabels();
+            ui.getChildren().remove(btn);
+            borderPane.requestFocus();
+        });
+    }
+
+    private void buttonDisplay() {
+        Cell cell = map.getPlayer().getCell();
+        System.out.println("Cell: " + cell);
+        if (cell.hasItem()) {
+            ui.add(btn, 0, 10);
+            btn.setVisible(true);
+            System.out.println("Button SHOW");
+        } else {
+            System.out.println("Button attempt to HIDE");
+            try {
+                btn.setVisible(false);
+                ui.getChildren().remove(btn);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        System.out.println(ui.getChildren());
+
+
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GridPane ui = new GridPane();
-        GridPane buttonPane = new GridPane();
-        Button btn = new Button("Pick Up Item");
+        initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
-
         ui.add(new Label("Health: "), 0, 0);
-        ui.add(btn, 0, 10);
+        ui.add(new Label("Inventory:"), 0, 2);
+        ui.add(inventoryLabel, 1, 2);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("Damage:"), 0, 1);
+        ui.add(damageLabel, 1, 1);
 
-        ui.add(new Label("Inventory:"),0,1);
-        ui.add(inventoryLabel,1,1);
 
-
-        BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
 
         borderPane.setBottom(ui);
-        //borderPane.setRight(ui);
-        borderPane.setBottom(buttonPane);
-        ui.setAlignment(Pos.BOTTOM_RIGHT);
+
+        ui.setAlignment(Pos.BOTTOM_LEFT);
 
 
         Scene scene = new Scene(borderPane);
@@ -84,23 +117,13 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
+
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), actionEvent -> {
             moveAllMonster();
             System.out.println("Running thread monster");
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
-        /*Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() ->{
-                    moveAllSkeleton();
-                });
-            }
-        },500,500);*/
-
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -112,7 +135,7 @@ public class Main extends Application {
     private void moveAllMonster() {
         for (Skeleton skeleton :
                 skeletons) {
-            if (skeleton.getCell() != null){
+            if (skeleton.getCell() != null) {
                 skeleton.moveSkeleton();
             }
 
@@ -166,12 +189,14 @@ public class Main extends Application {
         }
     }
 
-    public void refresh() {
+    private void refresh() {
+        buttonDisplay();
+        borderPane.requestFocus();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x+refreshHorizontal < map.getWidth(); x++) {
-            for (int y = 0; y+refreshVertical < map.getHeight(); y++) {
-                Cell cell = map.getCell(x+refreshHorizontal, y+refreshVertical);
+        for (int x = 0; x + refreshHorizontal < map.getWidth(); x++) {
+            for (int y = 0; y + refreshVertical < map.getHeight(); y++) {
+                Cell cell = map.getCell(x + refreshHorizontal, y + refreshVertical);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else {
@@ -179,18 +204,22 @@ public class Main extends Application {
                 }
             }
         }
+        updateLabels();
+    }
+
+    private void updateLabels() {
         healthLabel.setText("" + map.getPlayer().getHealth());
-//        inventoryLabel.setMaxWidth(200);
-        inventoryLabel.setText("<html><p style=\"width:100px \">"+Player.getInventoryContents()+"</p></html>");
+        damageLabel.setText(map.getPlayer().getDamage() + "");
+        inventoryLabel.setText(Player.getInventoryContents());
     }
 
 
-    private void setStarterValues(){
+    private void setStarterValues() {
 
-        if(Player.getHorizontal() > 22){
+        if (Player.getHorizontal() > 22) {
             refreshHorizontal = Player.getHorizontal() - 22;
-            if(refreshHorizontal> map.getWidth()-40){
-                refreshHorizontal = map.getWidth()-40;
+            if (refreshHorizontal > map.getWidth() - 40) {
+                refreshHorizontal = map.getWidth() - 40;
             }
         }
         if(Player.getVertical() > 12) {
@@ -200,7 +229,6 @@ public class Main extends Application {
             }
         }
     }
-
 
 
 }
