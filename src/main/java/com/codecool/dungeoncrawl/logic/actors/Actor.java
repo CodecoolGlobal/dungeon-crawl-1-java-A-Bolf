@@ -41,9 +41,7 @@ public abstract class Actor implements Drawable {
         }
     }
 
-    public void getCloserToActor(Actor actor){
 
-    }
 
     private void die() {
         cell.setActor(null);

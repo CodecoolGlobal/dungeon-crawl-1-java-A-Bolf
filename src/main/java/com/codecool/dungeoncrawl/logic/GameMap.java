@@ -1,11 +1,17 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Blup;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap {
     private int width;
     private int height;
     private Cell[][] cells;
+
 
     private Player player;
 
@@ -38,5 +44,21 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public List<Blup> getBlups() {
+        List<Blup> blups = new ArrayList<>();
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (cells[x][y].getActor() instanceof Blup) {
+
+                    Blup temp = (Blup) cells[x][y].getActor();
+                    blups.add(temp);
+
+
+                }
+            }
+        }
+        return blups;
     }
 }

@@ -59,7 +59,7 @@ public class MapLoader {
                             break;
                         case  'b':
                             cell.setType(CellType.FLOOR);
-                            blups.add(new Blup(cell, "mainBlup"));
+                            new Blup(cell, "mainBlup");
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
