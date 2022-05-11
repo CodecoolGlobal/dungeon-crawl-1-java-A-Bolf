@@ -1,10 +1,15 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 public class Ogre extends Actor{
+    private Cell cell;
+
     public Ogre(Cell cell) {
+
         super(cell, 20,2);
+        this.cell = cell;
     }
 
     @Override
@@ -31,8 +36,26 @@ public class Ogre extends Actor{
             else if (diffY < 0){
                 dY = -1;
             }
+            System.out.println(dX +""+dY);
             moveMonster(dX, dY);
         }
     }
 
+    @Override
+    public void move(int dx, int dy) {
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        if (nextCell.getActor() instanceof Player){
+            combat(nextCell.getActor());
+            return;
+        }
+        if (nextCell.getActor() != null){
+            return;
+        }
+        if (nextCell.getType() == CellType.FLOOR) {
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+            super.cell = nextCell;
+        }
+    }
 }
