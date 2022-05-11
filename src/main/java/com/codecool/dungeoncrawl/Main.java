@@ -37,7 +37,7 @@ public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
 
-    GameMap map = MapLoader.loadMap("/map3.txt");
+    GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -48,10 +48,8 @@ public class Main extends Application {
     private GridPane ui = new GridPane();
     private BorderPane borderPane = new BorderPane();
     Button btn;
-List<Skeleton> skeletons = MapLoader.getSkeletons();
+    List<Skeleton> skeletons = MapLoader.getSkeletons();
     List<Ogre> ogres = MapLoader.getOgres();
-
-    Label inventoryLabel=new Label();
 
 
     public static void main(String[] args) {
@@ -108,7 +106,6 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
         borderPane.setBottom(ui);
 
         ui.setAlignment(Pos.BOTTOM_LEFT);
-        borderPane.setBottom(buttonPane);
 
 
         Scene scene = new Scene(borderPane);
@@ -118,14 +115,6 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
         });
         primaryStage.setScene(scene);
         refresh();
-
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), actionEvent -> {
-
-        }));
-
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-
         scene.setOnKeyPressed(this::onKeyPressed);
 
 
@@ -146,7 +135,7 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
     private void moveAllMonster() {
         for (Skeleton skeleton :
                 skeletons) {
-            if (skeleton.getCell() != null){
+            if (skeleton.getCell() != null) {
                 skeleton.moveSkeleton();
             }
 
@@ -165,26 +154,30 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if(refreshVertical>0 && Player.getVertical()<map.getHeight() - 12){
-                    refreshVertical--;} // I need to calibrate with collision.
+                if (refreshVertical > 0 && Player.getVertical() < map.getHeight() - 12) {
+                    refreshVertical--;
+                } // I need to calibrate with collision.
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && refreshVertical < map.getHeight()-22){
-                refreshVertical++;} // I need to calibrate with collision.
+                if (Player.getVertical() > 11 && Player.getVertical() < map.getHeight() - 10 && refreshVertical < map.getHeight() - 22) {
+                    refreshVertical++;
+                } // I need to calibrate with collision.
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                if(refreshHorizontal>0 && Player.getHorizontal()<map.getWidth()-22){
-                    refreshHorizontal--;} // I need to calibrate with collision.
+                if (refreshHorizontal > 0 && Player.getHorizontal() < map.getWidth() - 22) {
+                    refreshHorizontal--;
+                } // I need to calibrate with collision.
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1,0);
-                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && refreshHorizontal < map.getWidth()-40){
-                    refreshHorizontal++;} // I need to calibrate with collision.
+                map.getPlayer().move(1, 0);
+                if (Player.getHorizontal() > 21 && Player.getHorizontal() < map.getWidth() - 18 && refreshHorizontal < map.getWidth() - 40) {
+                    refreshHorizontal++;
+                } // I need to calibrate with collision.
                 refresh();
                 break;
         }
@@ -195,9 +188,9 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x+refreshHorizontal < map.getWidth(); x++) {
-            for (int y = 0; y+refreshVertical < map.getHeight(); y++) {
-                Cell cell = map.getCell(x+refreshHorizontal, y+refreshVertical);
+        for (int x = 0; x + refreshHorizontal < map.getWidth(); x++) {
+            for (int y = 0; y + refreshVertical < map.getHeight(); y++) {
+                Cell cell = map.getCell(x + refreshHorizontal, y + refreshVertical);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else {
@@ -207,26 +200,29 @@ List<Skeleton> skeletons = MapLoader.getSkeletons();
         }
         updateLabels();
     }
-}
+
+    private void updateLabels() {
+        healthLabel.setText("" + map.getPlayer().getHealth());
+        damageLabel.setText(map.getPlayer().getDamage() + "");
+        inventoryLabel.setText(Player.getInventoryContents());
+    }
 
 
+    private void setStarterValues() {
 
-    private void setStarterValues(){
-
-        if(Player.getHorizontal() > 22){
+        if (Player.getHorizontal() > 22) {
             refreshHorizontal = Player.getHorizontal() - 22;
-            if(refreshHorizontal> map.getWidth()-40){
-                refreshHorizontal = map.getWidth()-40;
+            if (refreshHorizontal > map.getWidth() - 40) {
+                refreshHorizontal = map.getWidth() - 40;
             }
         }
-        if(Player.getVertical() > 12) {
+        if (Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
             if (refreshVertical > map.getHeight() - 22) {
                 refreshVertical = map.getHeight() - 22;
             }
         }
     }
-
 
 
 }
