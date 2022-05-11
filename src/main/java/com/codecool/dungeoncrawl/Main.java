@@ -15,8 +15,17 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import static com.codecool.dungeoncrawl.logic.MapLoader.getStarterHorizontal;
+import static com.codecool.dungeoncrawl.logic.MapLoader.getStarterVertical;
+
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    private int refreshVertical = 0;
+    private int refreshHorizontal = 0;
+    private int playerCurrentHorizontal;
+    private int playerCurrentVertical;
+
+
+    GameMap map = MapLoader.loadMap("/map3.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
@@ -48,24 +57,38 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+        setStarterValues();
+        refresh();
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                if(refreshVertical>0 && playerCurrentVertical<map.getHeight() - 12){
+                    refreshVertical--;} // I need to calibrate with collision.
+                playerCurrentVertical--;
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                if(playerCurrentVertical>11 && playerCurrentVertical< map.getHeight()-10 && refreshVertical < map.getHeight()-22){
+                refreshVertical++;} // I need to calibrate with collision.
+                playerCurrentVertical++;
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                if(refreshHorizontal>0 && playerCurrentHorizontal<map.getWidth()-22){
+                    refreshHorizontal--;} // I need to calibrate with collision.
+                playerCurrentHorizontal--;
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
+                if(playerCurrentHorizontal>21 && playerCurrentHorizontal <map.getWidth()-18 && refreshHorizontal < map.getWidth()-40){
+                    refreshHorizontal++;} // I need to calibrate with collision.
+                playerCurrentHorizontal++;
                 refresh();
                 break;
         }
@@ -74,9 +97,9 @@ public class Main extends Application {
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
-                Cell cell = map.getCell(x, y);
+        for (int x = 0; x+refreshHorizontal < map.getWidth(); x++) {
+            for (int y = 0; y+refreshVertical < map.getHeight(); y++) {
+                Cell cell = map.getCell(x+refreshHorizontal, y+refreshVertical);
                 if (cell.getActor() != null) {
                     Tiles.drawTile(context, cell.getActor(), x, y);
                 } else {
@@ -86,4 +109,28 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
     }
+
+
+    private void setStarterValues(){
+        playerCurrentHorizontal = getStarterHorizontal();
+        playerCurrentVertical = getStarterVertical();
+        if(playerCurrentHorizontal > 22){
+            refreshHorizontal = playerCurrentHorizontal - 22;
+            if(refreshHorizontal> map.getWidth()-40){
+                refreshHorizontal = map.getWidth()-40;
+            }
+        }
+        if(playerCurrentVertical > 12) {
+            refreshVertical = playerCurrentVertical - 12;
+            if (refreshVertical > map.getHeight() - 22) {
+                refreshVertical = map.getHeight() - 22;
+            }
+        }
+    }
+
+
+
 }
+
+
+

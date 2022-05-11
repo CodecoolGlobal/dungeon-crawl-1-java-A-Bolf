@@ -3,7 +3,10 @@ package com.codecool.dungeoncrawl.logic;
 public enum CellType {
     EMPTY("empty"),
     FLOOR("floor"),
-    WALL("wall");
+    WALL("wall"),
+    SHRINE("shrine"),
+    LADDER("ladder"),
+    HOLE("hole");
 
     private final String tileName;
 
