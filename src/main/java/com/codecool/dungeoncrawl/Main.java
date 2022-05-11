@@ -3,11 +3,15 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+
 import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+
+import com.codecool.dungeoncrawl.logic.actors.Player;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -30,6 +34,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.*;
+
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
     Canvas canvas = new Canvas(
@@ -39,6 +45,9 @@ public class Main extends Application {
     Label healthLabel = new Label();
     List<Skeleton> skeletons = MapLoader.getSkeletons();
     List<Ogre> ogres = MapLoader.getOgres();
+
+    Label inventoryLabel=new Label();
+
 
     public static void main(String[] args) {
         launch(args);
@@ -51,15 +60,23 @@ public class Main extends Application {
         Button btn = new Button("Pick Up Item");
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
+
         ui.add(new Label("Health: "), 0, 0);
         ui.add(btn, 0, 10);
         ui.add(healthLabel, 1, 0);
 
+        ui.add(new Label("Inventory:"),0,1);
+        ui.add(inventoryLabel,1,1);
+
+
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(canvas);
+
+        borderPane.setBottom(ui);
         borderPane.setRight(ui);
         borderPane.setBottom(buttonPane);
         ui.setAlignment(Pos.BOTTOM_RIGHT);
+
 
         Scene scene = new Scene(borderPane);
         btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -154,5 +171,7 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+//        inventoryLabel.setMaxWidth(200);
+        inventoryLabel.setText("<html><p style=\"width:100px \">"+Player.getInventoryContents()+"</p></html>");
     }
 }
