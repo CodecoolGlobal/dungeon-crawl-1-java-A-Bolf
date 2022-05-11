@@ -15,10 +15,10 @@ public abstract class Actor implements Drawable {
         this.damage = damage;
 
     }
-
     public abstract void move(int dx, int dy);
 
     protected void damageHealth(int damage) {
+
         health -= damage;
         if (health <= 0) {
             die();
