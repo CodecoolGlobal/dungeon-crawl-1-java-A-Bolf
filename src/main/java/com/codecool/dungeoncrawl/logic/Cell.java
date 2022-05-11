@@ -21,7 +21,6 @@ public class Cell implements Drawable {
         }
     }
 
-
     public Item getItem() {
         return item;
     }
@@ -79,4 +78,12 @@ public class Cell implements Drawable {
         return y;
     }
 
+
+
+    public boolean isWalkable() {
+        return type == CellType.FLOOR || type == CellType.ITEM;
+    }
+    public boolean isAttackable() {
+        return actor != null;
+    }
 }

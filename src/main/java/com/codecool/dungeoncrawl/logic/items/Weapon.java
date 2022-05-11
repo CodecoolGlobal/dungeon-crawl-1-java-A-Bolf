@@ -9,7 +9,9 @@ public class Weapon extends Item{
         super(cell);
         super.type=ItemType.SWORD;
     }
-
+ public int getDamage(){
+        return damage;
+    }
     @Override
     public String getTileName() {
         return "sword";
