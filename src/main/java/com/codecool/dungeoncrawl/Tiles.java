@@ -40,6 +40,10 @@ public class Tiles {
         tileMap.put("downLeftBlup",new Tile(11, 3));
         tileMap.put("upRightBlup",new Tile(9,3));
         tileMap.put("upLeftBlup",new Tile(10,3));
+        tileMap.put("door:closed", new Tile(3,9));
+        tileMap.put("door:open", new Tile(6,9));
+        tileMap.put("key", new Tile(16,23));
+
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
