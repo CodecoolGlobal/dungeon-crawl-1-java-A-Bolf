@@ -40,6 +40,8 @@ import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
 public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
+    private int maxrefreshHorizontal = 0;
+    private int maxrerefreshVertical = 0;
     private byte mapNow = 0;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
     private int windowHeight = (int)primaryScreenBounds.getHeight();
@@ -140,8 +142,29 @@ public class Main extends Application {
         primaryStage.show();
         borderPane.requestFocus();
         setStarterValues();
+        maxHorizontal();
+        maxVertical();
         refresh();
     }
+
+
+    private void maxHorizontal(){
+        for(int i = 0; (i*36)+windowWidth<=map.getWidth()*36;i++){
+            maxrefreshHorizontal=i;
+        }
+    }
+
+
+    private void maxVertical(){
+        for(int i = 0; (i*36)+windowHeight<= map.getHeight()*36;i++){
+            maxrerefreshVertical=i;
+        }
+
+    }
+
+
+    /*private void moveAllMonster() {
+        List<Blup> blups = map.getBlups();
 
 
     private void moveAllMonster() {
@@ -176,7 +199,7 @@ public class Main extends Application {
                     changeMap();
                     break;
                 }
-                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*32)-22) {
+                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*32)) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
                     }
@@ -204,7 +227,7 @@ public class Main extends Application {
                     changeMap();
                     break;
                 }
-                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*32) < (map.getWidth()*32)-40){
+                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*oneSquare) < (map.getWidth()*32)){
                     if(Player.collised(1,0)){
                         refreshHorizontal++;}
                 }
@@ -242,16 +265,16 @@ public class Main extends Application {
 
         if (Player.getHorizontal() > 22) {
             refreshHorizontal = Player.getHorizontal() - 22;
-            if (refreshHorizontal > map.getWidth() - 40) {
-                refreshHorizontal = map.getWidth() - 40;
+            if ((refreshHorizontal*oneSquare)+windowWidth >map.getWidth()*oneSquare) {
+                refreshHorizontal = maxrefreshHorizontal;
             }
         }else if(refreshHorizontal != 0){
             refreshHorizontal = 0;
         }
         if (Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
-            if (refreshVertical > map.getHeight() - 22) {
-                refreshVertical = map.getHeight() - 22;
+            if ((refreshVertical*oneSquare)+windowHeight >map.getHeight()*oneSquare) {
+                refreshHorizontal = maxrefreshHorizontal;
             }
         }else if(refreshVertical != 0){
             refreshVertical = 0;
@@ -267,6 +290,8 @@ public class Main extends Application {
             mapNow=0;
         }
         setStarterValues();
+        maxHorizontal();
+        maxVertical();
         refresh();
     }
 }
