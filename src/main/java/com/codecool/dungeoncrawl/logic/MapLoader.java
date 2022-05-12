@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.logic.actors.Blup;
+import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
@@ -7,11 +9,25 @@ import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+
+    public static List<Skeleton> getSkeletons() {
+        return skeletons;
+    }
+    public static List<Ogre> getOgres() {
+        return ogres;
+    }
+    public static List<Blup> getBlups() {return blups;}
+
+    private static final List<Blup> blups = new ArrayList<>();
+    private static final List<Skeleton> skeletons = new ArrayList<>();
+    private static final List<Ogre> ogres = new ArrayList<>();
+    public static GameMap loadMap(String givenMap) {
+        InputStream is = MapLoader.class.getResourceAsStream(givenMap);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -36,11 +52,19 @@ public class MapLoader {
                             break;
                         case 's':
                             cell.setType(CellType.FLOOR);
-                            new Skeleton(cell);
+                            skeletons.add(new Skeleton(cell));
+                            break;
+                        case 'o':
+                            cell.setType(CellType.FLOOR);
+                            ogres.add(new Ogre(cell));
+                            break;
+                        case  'b':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, "mainBlup");
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            map.setPlayer(new Player(cell,y,x));
                             break;
                         case 'F':
                             cell.setType(CellType.ITEM);
@@ -56,6 +80,15 @@ public class MapLoader {
                         case 'K':
                             cell.setType(CellType.ITEM);
                             cell.setItem(new Key(cell));
+                            break;
+                        case 'S':
+                            cell.setType(CellType.SHRINE);
+                            break;
+                        case 'l':
+                            cell.setType(CellType.LADDER);
+                            break;
+                        case 'h':
+                            cell.setType(CellType.HOLE);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

@@ -1,10 +1,11 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
-    private Cell cell;
+    protected Cell cell;
     private int health;
     private int damage;
 
@@ -17,13 +18,30 @@ public abstract class Actor implements Drawable {
     }
     public abstract void move(int dx, int dy);
 
-    protected void damageHealth(int damage) {
 
+    public void moveMonster(int dx, int dy){
+        Cell nextCell = cell.getNeighbor(dx, dy);
+        if (nextCell.getActor() instanceof Player){
+            combat(nextCell.getActor());
+            return;
+        }
+        if (nextCell.getActor() != null){
+            return;
+        }
+        if (nextCell.getType() == CellType.FLOOR) {
+            cell.setActor(null);
+            nextCell.setActor(this);
+            cell = nextCell;
+        }
+    }
+    protected void damageHealth(int damage) {
         health -= damage;
         if (health <= 0) {
             die();
         }
     }
+
+
 
     private void die() {
         cell.setActor(null);

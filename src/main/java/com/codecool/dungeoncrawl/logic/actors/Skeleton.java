@@ -2,6 +2,8 @@ package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
 
+import java.util.Random;
+
 public class Skeleton extends Actor {
     private Cell cell;
 
@@ -10,23 +12,37 @@ public class Skeleton extends Actor {
         this.cell = cell;
     }
 
+    private Random random = new Random();
+
     @Override
     public String getTileName() {
         return "skeleton";
     }
-
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
-                super.combat(nextCell.getActor());
+                nextCell.getActor().damageHealth(getDamage());
                 return;
             }
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
+            super.cell = nextCell;
         }
     }
+    public void moveSkeleton() {
+        int dx = random.nextInt(3) - 1;
+        int dy;
+        if (dx == 0) {
+            dy = random.nextInt(3) - 1;
+        } else {
+            dy = 0;
+        }
+        if (dy != 0 || dx != 0){
+            move(dx, dy);
+        }
 
+    }
 }

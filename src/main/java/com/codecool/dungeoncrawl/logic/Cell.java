@@ -84,7 +84,7 @@ public class Cell implements Drawable {
 
 
     public boolean isWalkable() {
-        return type == CellType.FLOOR || type == CellType.ITEM|| type == CellType.DOOR;
+        return type == CellType.FLOOR || type == CellType.ITEM || type == CellType.LADDER|| type == CellType.HOLE|| type == CellType.SHRINE|| type == CellType.DOOR;
     }
     public boolean isAttackable() {
         return actor != null;
