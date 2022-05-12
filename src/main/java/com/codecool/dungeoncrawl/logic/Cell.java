@@ -8,6 +8,7 @@ public class Cell implements Drawable {
     private Actor actor;
     private Item item;
     private GameMap gameMap;
+    private DoorType doorStatus;
     private int x, y;
 
     Cell(GameMap gameMap, int x, int y, CellType type) {
@@ -15,6 +16,9 @@ public class Cell implements Drawable {
         this.x = x;
         this.y = y;
         this.type = type;
+        if (type == CellType.DOOR) {
+            doorStatus = DoorType.CLOSED;
+        }
     }
 
     public Item getItem() {
@@ -27,6 +31,12 @@ public class Cell implements Drawable {
 
     public void setType(CellType type) {
         this.type = type;
+        if (type == CellType.DOOR) {
+            doorStatus = DoorType.CLOSED;
+        }
+    }
+    public void setDoorStatus(DoorType doorStatus) {
+        this.doorStatus = doorStatus;
     }
 
     public void setActor(Actor actor) {
@@ -43,6 +53,9 @@ public class Cell implements Drawable {
 
     @Override
     public String getTileName() {
+        if (type == CellType.DOOR) {
+            return doorStatus.getTileName();
+        }
         return type.getTileName(this);
     }
 
@@ -69,9 +82,15 @@ public class Cell implements Drawable {
     }
 
 
+
     public boolean isWalkable() {
-        return type == CellType.FLOOR || type == CellType.ITEM || type == CellType.LADDER|| type == CellType.HOLE|| type == CellType.SHRINE;
+        return type == CellType.FLOOR || type == CellType.ITEM || type == CellType.LADDER|| type == CellType.HOLE|| type == CellType.SHRINE|| type == CellType.DOOR;
     }
+
+    public boolean isPassage() {
+        return type == CellType.LADDER || type == CellType.HOLE;
+    }
+
     public boolean isAttackable() {
         return actor != null;
     }

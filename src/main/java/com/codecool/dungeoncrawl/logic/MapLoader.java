@@ -5,7 +5,10 @@ import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
+import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,7 +16,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
-
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+    private static Player player = null;
+    private static boolean dontPlacePlayerToStarter = false;
     public static List<Skeleton> getSkeletons() {
         return skeletons;
     }
@@ -62,8 +67,18 @@ public class MapLoader {
                             new Blup(cell, "mainBlup");
                             break;
                         case '@':
-                            cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell,y,x));
+                            if(!dontPlacePlayerToStarter) {
+                                cell.setType(CellType.FLOOR);
+                                if (player == null) {
+                                    player = new Player(cell, y, x);
+                                    map.setPlayer(player);
+                                } else {
+                                    player.setStart(cell, y, x);
+                                    map.setPlayer(player);
+                                }
+                            }else{
+                                cell.setType(CellType.FLOOR);
+                            }
                             break;
                         case 'F':
                             cell.setType(CellType.ITEM);
@@ -72,6 +87,13 @@ public class MapLoader {
                         case 'W':
                             cell.setType(CellType.ITEM);
                             cell.setItem(new Weapon(cell));
+                            break;
+                        case 'D':
+                            cell.setType(CellType.DOOR);
+                            break;
+                        case 'K':
+                            cell.setType(CellType.ITEM);
+                            cell.setItem(new Key(cell));
                             break;
                         case 'S':
                             cell.setType(CellType.SHRINE);
@@ -82,12 +104,23 @@ public class MapLoader {
                         case 'h':
                             cell.setType(CellType.HOLE);
                             break;
+                        case '~':
+                            if(dontPlacePlayerToStarter) {
+                                cell.setType(CellType.FLOOR);
+                                    player.setStart(cell, y, x);
+                                    map.setPlayer(player);
+                            }else{
+                                cell.setType(CellType.FLOOR);
+                            }
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
+
                     }
                 }
             }
         }
+        dontPlacePlayerToStarter = true;
         return map;
     }
 

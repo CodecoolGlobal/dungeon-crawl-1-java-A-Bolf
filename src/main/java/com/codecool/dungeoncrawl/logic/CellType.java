@@ -1,5 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
+import java.util.Objects;
+
 public enum CellType {
     EMPTY("empty"),
     FLOOR("floor"),
@@ -7,7 +9,8 @@ public enum CellType {
     SHRINE("shrine"),
     LADDER("ladder"),
     ITEM("item"),
-    HOLE("hole");
+    HOLE("hole"),
+    DOOR("door");
 
     private final String tileName;
 
@@ -16,8 +19,12 @@ public enum CellType {
     }
 
     public String getTileName(Cell cell) {
-        if (tileName=="item")
+        if (Objects.equals(tileName, "item")) {
             return cell.getItem().getTileName();
+        }
+        if (Objects.equals(tileName, "door")) {
+            return cell.getTileName();
+        }
         return tileName;
     }
 }

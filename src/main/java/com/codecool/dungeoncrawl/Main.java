@@ -17,6 +17,7 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -27,15 +28,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
+
 public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
+    private byte mapNow = 0;
+    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
 
     GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
@@ -86,6 +93,9 @@ public class Main extends Application {
         System.out.println(ui.getChildren());
 
 
+    }
+    private void printMe(){
+        System.out.println(primaryScreenBounds);
     }
 
     @Override
@@ -157,6 +167,10 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                if(passage()){
+                    changeMap();
+                    break;
+                }
                 if(refreshVertical>0 && Player.getVertical()<map.getHeight() - 12) {
                     if (Player.collised(0, -1)) {
                         refreshVertical--;
@@ -166,6 +180,10 @@ public class Main extends Application {
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                if(passage()){
+                    changeMap();
+                    break;
+                }
                 if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && refreshVertical < map.getHeight()-22) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
@@ -175,6 +193,10 @@ public class Main extends Application {
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                if(passage()){
+                    changeMap();
+                    break;
+                }
                 if(refreshHorizontal>0 && Player.getHorizontal()<map.getWidth()-22) {
                     if (Player.collised(-1, 0)) {
                         refreshHorizontal--;
@@ -184,6 +206,10 @@ public class Main extends Application {
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
+                if(passage()){
+                    changeMap();
+                    break;
+                }
                 if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && refreshHorizontal < map.getWidth()-40){
                     if(Player.collised(1,0)){
                         refreshHorizontal++;}
@@ -225,14 +251,28 @@ public class Main extends Application {
             if (refreshHorizontal > map.getWidth() - 40) {
                 refreshHorizontal = map.getWidth() - 40;
             }
+        }else if(refreshHorizontal != 0){
+            refreshHorizontal = 0;
         }
         if(Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
             if (refreshVertical > map.getHeight() - 22) {
                 refreshVertical = map.getHeight() - 22;
             }
+        }else if(refreshVertical != 0){
+            refreshVertical = 0;
         }
     }
 
-
+    private  void changeMap(){
+        if(mapNow==0){
+            map = MapLoader.loadMap("/map3.txt");
+            mapNow=1;
+        }else {
+            map = MapLoader.loadMap("/map2.txt");
+            mapNow=0;
+        }
+        setStarterValues();
+        refresh();
+    }
 }
