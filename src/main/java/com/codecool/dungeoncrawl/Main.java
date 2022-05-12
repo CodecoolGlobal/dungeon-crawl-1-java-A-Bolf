@@ -147,6 +147,7 @@ public class Main extends Application {
         refresh();
     }
 
+
     private void maxHorizontal(){
         for(int i = 0; (i*36)+windowWidth<=map.getWidth()*36;i++){
             maxrefreshHorizontal=i;
@@ -165,24 +166,15 @@ public class Main extends Application {
     /*private void moveAllMonster() {
         List<Blup> blups = map.getBlups();
 
-        for (Skeleton skeleton :
-                skeletons) {
-            if (skeleton.getCell() != null) {
-                skeleton.moveSkeleton();
-            }
-        }
-        for (Ogre ogre :
-                ogres) {
-            if (ogre.getCell() != null) {
-                ogre.chasePlayer(map.getPlayer());
-            }
-        }
-        for (Blup blub :
-                blups) {
-            blub.grow(map.getPlayer());
+
+    private void moveAllMonster() {
+        List<Monster> monsters = map.getMonsters();
+        for (Monster monster :
+                monsters) {
+            monster.moveMonsters(map.getPlayer());
         }
         refresh();
-    }*/
+    }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
@@ -279,7 +271,7 @@ public class Main extends Application {
         }else if(refreshHorizontal != 0){
             refreshHorizontal = 0;
         }
-        if(Player.getVertical() > 12) {
+        if (Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
             if ((refreshVertical*oneSquare)+windowHeight >map.getHeight()*oneSquare) {
                 refreshHorizontal = maxrefreshHorizontal;

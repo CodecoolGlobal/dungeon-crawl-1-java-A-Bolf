@@ -3,7 +3,7 @@ package com.codecool.dungeoncrawl.logic.actors;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
-public class Ogre extends Actor{
+public class Ogre extends Monster {
     private Cell cell;
 
     public Ogre(Cell cell) {
@@ -56,5 +56,10 @@ public class Ogre extends Actor{
             cell = nextCell;
             super.cell = nextCell;
         }
+    }
+
+    @Override
+    public void moveMonsters(Player player) {
+        chasePlayer(player);
     }
 }
