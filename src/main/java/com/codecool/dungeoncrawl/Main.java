@@ -142,23 +142,10 @@ public class Main extends Application {
     }
 
     private void moveAllMonster() {
-        List<Blup> blups = map.getBlups();
-
-        for (Skeleton skeleton :
-                skeletons) {
-            if (skeleton.getCell() != null) {
-                skeleton.moveSkeleton();
-            }
-        }
-        for (Ogre ogre :
-                ogres) {
-            if (ogre.getCell() != null) {
-                ogre.chasePlayer(map.getPlayer());
-            }
-        }
-        for (Blup blub :
-                blups) {
-            blub.grow(map.getPlayer());
+        List<Monster> monsters = map.getMonsters();
+        for (Monster monster :
+                monsters) {
+            monster.moveMonsters(map.getPlayer());
         }
         refresh();
     }

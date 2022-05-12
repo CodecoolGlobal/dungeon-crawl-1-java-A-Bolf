@@ -4,7 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 
 import java.util.Random;
 
-public class Skeleton extends Actor {
+public class Skeleton extends Monster {
     private Cell cell;
 
     public Skeleton(Cell cell) {
@@ -32,7 +32,13 @@ public class Skeleton extends Actor {
             super.cell = nextCell;
         }
     }
-    public void moveSkeleton() {
+
+    @Override
+    public void moveMonsters(Player player) {
+        getRandomDirection();
+    }
+
+    public void getRandomDirection() {
         int dx = random.nextInt(3) - 1;
         int dy;
         if (dx == 0) {

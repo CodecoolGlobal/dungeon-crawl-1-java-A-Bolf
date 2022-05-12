@@ -1,7 +1,7 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Blup;
+import com.codecool.dungeoncrawl.logic.actors.Monster;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
 import java.util.ArrayList;
@@ -46,19 +46,16 @@ public class GameMap {
         return height;
     }
 
-    public List<Blup> getBlups() {
-        List<Blup> blups = new ArrayList<>();
+    public List<Monster> getMonsters() {
+        List<Monster> monsters = new ArrayList<>();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if (cells[x][y].getActor() instanceof Blup) {
-
-                    Blup temp = (Blup) cells[x][y].getActor();
-                    blups.add(temp);
-
-
+                if (cells[x][y].getActor() instanceof Monster) {
+                    Monster temp = (Monster) cells[x][y].getActor();
+                    monsters.add(temp);
                 }
             }
         }
-        return blups;
+        return monsters;
     }
 }

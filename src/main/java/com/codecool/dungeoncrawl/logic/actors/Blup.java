@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Blup extends Actor {
+public class Blup extends Monster {
     private Cell cell;
     private final String name;
     private boolean upSide = false;
@@ -15,6 +15,7 @@ public class Blup extends Actor {
     private boolean leftSide = false;
     private boolean rightSide = false;
     private static final Random random = new Random();
+    private List<String> blupTypes = new ArrayList<>();
 
     public Blup(Cell cell, String name) {
         super(cell, 5, 1);
@@ -50,7 +51,6 @@ public class Blup extends Actor {
     }
 
     public void grow(Player player) {
-        List<String> blupTypes = new ArrayList<>();
         int dX = 0;
         int dY = 0;
         boolean side;
@@ -62,7 +62,7 @@ public class Blup extends Actor {
                 blupTypes.add("downRightBlup");
                 blupTypes.add("downLeftBlup");
                 dY = -1;
-                upSide = growLogic(dX,dY,blupTypes);
+                move(dX,dY);
                 dY = 0;
 
             }
@@ -72,7 +72,7 @@ public class Blup extends Actor {
                 blupTypes.add("upRightBlup");
                 blupTypes.add("upLeftBlup");
                 dY = 1;
-                downSide = growLogic(dX,dY,blupTypes);
+                move(dX,dY);
                 dY = 0;
 
             }
@@ -83,7 +83,7 @@ public class Blup extends Actor {
                 blupTypes.add("upRightBlup");
                 blupTypes.add("downRightBlup");
                 dX = -1;
-                leftSide = growLogic(dX,dY,blupTypes);
+                move(dX,dY);
                 dX = 0;
             }
             if(rightSide){
@@ -94,23 +94,10 @@ public class Blup extends Actor {
                 blupTypes.add("upLeftBlup");
                 blupTypes.add("downLeftBlup");
                 dX = 1;
-                rightSide = growLogic(dX,dY,blupTypes);
+                move(dX,dY);
             }
 
         }
-    }
-
-    private boolean growLogic(int dX, int dY, List<String> blupTypes){
-        Cell nextCell = cell.getNeighbor(dX,dY);
-        String blupType = blupTypes.get(random.nextInt(blupTypes.size()));
-        if(nextCell.getType() == CellType.FLOOR
-                && nextCell.getType() != CellType.ITEM
-                && !nextCell.isAttackable()){
-            System.out.println("try to grow " +blupType);
-            new Blup(nextCell, blupType);
-            return true;
-        }
-        return true;
     }
 
     @Override
@@ -119,7 +106,19 @@ public class Blup extends Actor {
     }
 
     @Override
-    public void move(int dx, int dy) {
+    public void move(int dX, int dY) {
+        Cell nextCell = cell.getNeighbor(dX,dY);
+        String blupType = blupTypes.get(random.nextInt(blupTypes.size()));
+        if(nextCell.getType() == CellType.FLOOR
+                && nextCell.getType() != CellType.ITEM
+                && !nextCell.isAttackable()){
+            System.out.println("try to grow " +blupType);
+            new Blup(nextCell, blupType);
+        }
+    }
 
+    @Override
+    public void moveMonsters(Player player) {
+        grow(player);
     }
 }
