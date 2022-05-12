@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class Tiles {
     public static int TILE_WIDTH = 32;
-
     private static Image tileset = new Image("/tiles.png", 543 * 2, 543 * 2, true, false);
     private static Map<String, Tile> tileMap = new HashMap<>();
     public static class Tile {
@@ -28,6 +27,9 @@ public class Tiles {
         tileMap.put("floor", new Tile(2, 0));
         tileMap.put("player", new Tile(27, 0));
         tileMap.put("skeleton", new Tile(29, 6));
+        tileMap.put("shrine", new Tile(2, 14));
+        tileMap.put("ladder", new Tile(21, 1));
+        tileMap.put("hole", new Tile(17, 17));
         tileMap.put("sword", new Tile(5,5));
         tileMap.put("food", new Tile(11,11));
         tileMap.put("ogre", new Tile(30, 6));

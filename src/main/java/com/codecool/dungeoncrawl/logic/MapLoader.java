@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MapLoader {
+
     public static List<Skeleton> getSkeletons() {
         return skeletons;
     }
@@ -24,12 +25,11 @@ public class MapLoader {
     private static final List<Blup> blups = new ArrayList<>();
     private static final List<Skeleton> skeletons = new ArrayList<>();
     private static final List<Ogre> ogres = new ArrayList<>();
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(String givenMap) {
+        InputStream is = MapLoader.class.getResourceAsStream(givenMap);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
-
 
         scanner.nextLine(); // empty line
 
@@ -63,7 +63,7 @@ public class MapLoader {
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
+                            map.setPlayer(new Player(cell,y,x));
                             break;
                         case 'F':
                             cell.setType(CellType.ITEM);
@@ -72,6 +72,15 @@ public class MapLoader {
                         case 'W':
                             cell.setType(CellType.ITEM);
                             cell.setItem(new Weapon(cell));
+                            break;
+                        case 'S':
+                            cell.setType(CellType.SHRINE);
+                            break;
+                        case 'l':
+                            cell.setType(CellType.LADDER);
+                            break;
+                        case 'h':
+                            cell.setType(CellType.HOLE);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
