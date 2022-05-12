@@ -143,27 +143,15 @@ public class Main extends Application {
         refresh();
     }
 
-    /*private void moveAllMonster() {
-        List<Blup> blups = map.getBlups();
 
-        for (Skeleton skeleton :
-                skeletons) {
-            if (skeleton.getCell() != null) {
-                skeleton.moveSkeleton();
-            }
-        }
-        for (Ogre ogre :
-                ogres) {
-            if (ogre.getCell() != null) {
-                ogre.chasePlayer(map.getPlayer());
-            }
-        }
-        for (Blup blub :
-                blups) {
-            blub.grow(map.getPlayer());
+    private void moveAllMonster() {
+        List<Monster> monsters = map.getMonsters();
+        for (Monster monster :
+                monsters) {
+            monster.moveMonsters(map.getPlayer());
         }
         refresh();
-    }*/
+    }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
