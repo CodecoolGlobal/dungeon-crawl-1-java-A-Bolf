@@ -41,8 +41,10 @@ public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
     private byte mapNow = 0;
-    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-
+    private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+    private int windowHeight = (int)primaryScreenBounds.getHeight();
+    private int windowWidth = (int)primaryScreenBounds.getWidth();
+    private int oneSquare = 32;
 
     GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
@@ -129,7 +131,7 @@ public class Main extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
 
-            moveAllMonster();
+            //moveAllMonster();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -140,6 +142,7 @@ public class Main extends Application {
         setStarterValues();
         refresh();
     }
+
 
     private void moveAllMonster() {
         List<Monster> monsters = map.getMonsters();
@@ -153,6 +156,7 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case UP:
+                printMe();
                 map.getPlayer().move(0, -1);
                 if(passage()){
                     changeMap();
@@ -166,12 +170,13 @@ public class Main extends Application {
                 refresh();
                 break;
             case DOWN:
+                printMe();
                 map.getPlayer().move(0, 1);
                 if(passage()){
                     changeMap();
                     break;
                 }
-                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && refreshVertical < map.getHeight()-22) {
+                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*32)-22) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
                     }
@@ -179,6 +184,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case LEFT:
+                printMe();
                 map.getPlayer().move(-1, 0);
                 if(passage()){
                     changeMap();
@@ -192,12 +198,13 @@ public class Main extends Application {
                 refresh();
                 break;
             case RIGHT:
+                printMe();
                 map.getPlayer().move(1,0);
                 if(passage()){
                     changeMap();
                     break;
                 }
-                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && refreshHorizontal < map.getWidth()-40){
+                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*32) < (map.getWidth()*32)-40){
                     if(Player.collised(1,0)){
                         refreshHorizontal++;}
                 }
