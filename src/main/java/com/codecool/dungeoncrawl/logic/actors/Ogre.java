@@ -8,7 +8,7 @@ public class Ogre extends Actor{
 
     public Ogre(Cell cell) {
 
-        super(cell, 20,2);
+        super(cell, 20,4);
         this.cell = cell;
     }
 
@@ -17,7 +17,7 @@ public class Ogre extends Actor{
         return "ogre";
     }
 
-    public void chasePlayer(Player player){
+    public void chasePlayer(Actor player){
         if (Math.abs(getX()-player.getX()) < 5
                 && Math.abs(getY()-player.getY()) < 5){
             int diffX = player.getX()-getX();
@@ -36,8 +36,7 @@ public class Ogre extends Actor{
             else if (diffY < 0){
                 dY = -1;
             }
-            System.out.println(dX +""+dY);
-            moveMonster(dX, dY);
+            move(dX, dY);
         }
     }
 

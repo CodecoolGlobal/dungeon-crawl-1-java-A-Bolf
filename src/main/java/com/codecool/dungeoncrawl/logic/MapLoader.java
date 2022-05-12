@@ -1,6 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.Main;
+import com.codecool.dungeoncrawl.logic.actors.Blup;
 import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
@@ -20,7 +20,9 @@ public class MapLoader {
     public static List<Ogre> getOgres() {
         return ogres;
     }
+    public static List<Blup> getBlups() {return blups;}
 
+    private static final List<Blup> blups = new ArrayList<>();
     private static final List<Skeleton> skeletons = new ArrayList<>();
     private static final List<Ogre> ogres = new ArrayList<>();
     public static GameMap loadMap(String givenMap) {
@@ -54,6 +56,10 @@ public class MapLoader {
                         case 'o':
                             cell.setType(CellType.FLOOR);
                             ogres.add(new Ogre(cell));
+                            break;
+                        case  'b':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, "mainBlup");
                             break;
                         case '@':
                             cell.setType(CellType.FLOOR);

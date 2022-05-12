@@ -4,8 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
-import com.codecool.dungeoncrawl.logic.actors.Ogre;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -31,6 +30,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
@@ -117,10 +117,9 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), actionEvent -> {
             moveAllMonster();
-            System.out.println("Running thread monster");
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -133,18 +132,23 @@ public class Main extends Application {
     }
 
     private void moveAllMonster() {
+        List<Blup> blups = map.getBlups();
+
         for (Skeleton skeleton :
                 skeletons) {
             if (skeleton.getCell() != null) {
                 skeleton.moveSkeleton();
             }
-
         }
         for (Ogre ogre :
                 ogres) {
             if (ogre.getCell() != null) {
                 ogre.chasePlayer(map.getPlayer());
             }
+        }
+        for (Blup blub :
+                blups) {
+            blub.grow(map.getPlayer());
         }
         refresh();
     }
