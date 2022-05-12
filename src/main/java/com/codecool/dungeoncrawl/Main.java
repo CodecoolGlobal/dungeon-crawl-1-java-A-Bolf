@@ -11,9 +11,6 @@ import javafx.animation.Timeline;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
