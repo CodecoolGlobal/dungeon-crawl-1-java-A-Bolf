@@ -53,7 +53,6 @@ public class Blup extends Actor {
         List<String> blupTypes = new ArrayList<>();
         int dX = 0;
         int dY = 0;
-        boolean side;
         if (Math.abs(getX() - player.getX()) < 5
                 && Math.abs(getY() - player.getY()) < 5) {
             if(upSide){
@@ -61,7 +60,7 @@ public class Blup extends Actor {
                 blupTypes.add("downRightBlup");
                 blupTypes.add("downLeftBlup");
                 dY = -1;
-                upSide = growLogic(dX,dY,blupTypes);
+                growLogic(dX,dY,blupTypes);
                 dY = 0;
 
             }
@@ -71,7 +70,7 @@ public class Blup extends Actor {
                 blupTypes.add("upRightBlup");
                 blupTypes.add("upLeftBlup");
                 dY = 1;
-                downSide = growLogic(dX,dY,blupTypes);
+                growLogic(dX,dY,blupTypes);
                 dY = 0;
 
             }
@@ -81,8 +80,7 @@ public class Blup extends Actor {
                 blupTypes.add("upRightBlup");
                 blupTypes.add("downRightBlup");
                 dX = -1;
-                leftSide = growLogic(dX,dY,blupTypes);
-                dX = 0;
+                growLogic(dX,dY,blupTypes);
             }
             if(rightSide){
                 blupTypes.clear();
@@ -90,22 +88,20 @@ public class Blup extends Actor {
                 blupTypes.add("upLeftBlup");
                 blupTypes.add("downLeftBlup");
                 dX = 1;
-                rightSide = growLogic(dX,dY,blupTypes);
+                growLogic(dX,dY,blupTypes);
             }
 
         }
     }
 
-    private boolean growLogic(int dX, int dY, List<String> blupTypes){
+    private void growLogic(int dX, int dY, List<String> blupTypes){
         Cell nextCell = cell.getNeighbor(dX,dY);
         String blupType = blupTypes.get(random.nextInt(blupTypes.size()));
         if(nextCell.getType() == CellType.FLOOR
                 && nextCell.getType() != CellType.ITEM
                 && !nextCell.isAttackable()){
             new Blup(nextCell, blupType);
-            return true;
         }
-        return true;
     }
 
     @Override
