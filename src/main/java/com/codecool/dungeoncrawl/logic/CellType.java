@@ -9,8 +9,7 @@ public enum CellType {
     SHRINE("shrine"),
     LADDER("ladder"),
     ITEM("item"),
-    HOLE("hole");
-    ITEM("item"),
+    HOLE("hole"),
     DOOR("door");
 
     private final String tileName;

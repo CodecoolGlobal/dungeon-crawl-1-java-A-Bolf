@@ -40,10 +40,6 @@ public class Player extends Actor implements CanPickupItems {
                 super.combat(nextCell.getActor());
                 return;
             }
-            if (nextCell.hasItem()) {
-                pickUpItem(nextCell);
-                nextCell.removeItem();
-            }
             if (nextCell.getType() == CellType.DOOR) {
                 if (key != null) {
                     key.openDoor(nextCell);
