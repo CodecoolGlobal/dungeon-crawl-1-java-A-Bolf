@@ -254,7 +254,7 @@ public class Main extends Application {
         }else if(refreshHorizontal != 0){
             refreshHorizontal = 0;
         }
-        if(Player.getVertical() > 12) {
+        if (Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
             if (refreshVertical > map.getHeight() - 22) {
                 refreshVertical = map.getHeight() - 22;
