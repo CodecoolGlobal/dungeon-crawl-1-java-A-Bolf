@@ -17,6 +17,14 @@ public class Player extends Actor implements CanPickupItems {
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();
 
+
+    public void setStart(Cell cell,int vertical,int horizontal){
+        this.cell = cell;
+        this.vertical = vertical;
+        this.horizontal = horizontal;
+        cell.setActor(this);
+    }
+
     public Player(Cell cell,int vertical,int horizontal) {
         super(cell, 100, 5);
         this.cell = cell;
@@ -94,6 +102,15 @@ public class Player extends Actor implements CanPickupItems {
         }
         return false;
     }
+
+    public static boolean passage() {
+        Cell nextCell = cell.getNeighbor(0, 0);
+        if (nextCell.isPassage()) {
+            return true;
+        }
+        return false;
+    }
+
 
     public String getTileName() {
         return "player";
