@@ -1,10 +1,11 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.Main;
+import com.codecool.dungeoncrawl.logic.actors.Blup;
 import com.codecool.dungeoncrawl.logic.actors.Ogre;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
+import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
@@ -24,7 +25,9 @@ public class MapLoader {
     public static List<Ogre> getOgres() {
         return ogres;
     }
+    public static List<Blup> getBlups() {return blups;}
 
+    private static final List<Blup> blups = new ArrayList<>();
     private static final List<Skeleton> skeletons = new ArrayList<>();
     private static final List<Ogre> ogres = new ArrayList<>();
     public static GameMap loadMap(String givenMap) {
@@ -59,6 +62,10 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             ogres.add(new Ogre(cell));
                             break;
+                        case  'b':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, "mainBlup");
+                            break;
                         case '@':
                             if(!dontPlacePlayerToStarter) {
                                 cell.setType(CellType.FLOOR);
@@ -80,6 +87,13 @@ public class MapLoader {
                         case 'W':
                             cell.setType(CellType.ITEM);
                             cell.setItem(new Weapon(cell));
+                            break;
+                        case 'D':
+                            cell.setType(CellType.DOOR);
+                            break;
+                        case 'K':
+                            cell.setType(CellType.ITEM);
+                            cell.setItem(new Key(cell));
                             break;
                         case 'S':
                             cell.setType(CellType.SHRINE);

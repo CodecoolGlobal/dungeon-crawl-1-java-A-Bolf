@@ -33,6 +33,17 @@ public class Tiles {
         tileMap.put("sword", new Tile(5,5));
         tileMap.put("food", new Tile(11,11));
         tileMap.put("ogre", new Tile(30, 6));
+        tileMap.put("mainBlup",new Tile(14, 5));
+        tileMap.put("upDownBlup",new Tile(12,5));
+        tileMap.put("leftRightBlup",new Tile(12, 3));
+        tileMap.put("downRightBlup",new Tile(13, 5));
+        tileMap.put("downLeftBlup",new Tile(11, 3));
+        tileMap.put("upRightBlup",new Tile(9,3));
+        tileMap.put("upLeftBlup",new Tile(10,3));
+        tileMap.put("door:closed", new Tile(3,9));
+        tileMap.put("door:open", new Tile(6,9));
+        tileMap.put("key", new Tile(16,23));
+
     }
 
     public static void drawTile(GraphicsContext context, Drawable d, int x, int y) {
