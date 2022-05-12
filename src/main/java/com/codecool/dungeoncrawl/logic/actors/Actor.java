@@ -19,21 +19,7 @@ public abstract class Actor implements Drawable {
     public abstract void move(int dx, int dy);
 
 
-    public void moveMonster(int dx, int dy){
-        Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getActor() instanceof Player){
-            combat(nextCell.getActor());
-            return;
-        }
-        if (nextCell.getActor() != null){
-            return;
-        }
-        if (nextCell.getType() == CellType.FLOOR) {
-            cell.setActor(null);
-            nextCell.setActor(this);
-            cell = nextCell;
-        }
-    }
+
     protected void damageHealth(int damage) {
         health -= damage;
         if (health <= 0) {

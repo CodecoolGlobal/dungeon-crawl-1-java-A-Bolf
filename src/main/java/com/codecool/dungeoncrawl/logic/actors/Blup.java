@@ -54,7 +54,6 @@ public class Blup extends Actor {
         int dX = 0;
         int dY = 0;
         boolean side;
-        System.out.println("-------------------------------------");
         if (Math.abs(getX() - player.getX()) < 5
                 && Math.abs(getY() - player.getY()) < 5) {
             if(upSide){
@@ -78,7 +77,6 @@ public class Blup extends Actor {
             }
             if(leftSide){
                 blupTypes.clear();
-                System.out.println("left side");
                 blupTypes.add("leftRightBlup");
                 blupTypes.add("upRightBlup");
                 blupTypes.add("downRightBlup");
@@ -88,8 +86,6 @@ public class Blup extends Actor {
             }
             if(rightSide){
                 blupTypes.clear();
-                System.out.println("right side");
-                System.out.println(blupTypes);
                 blupTypes.add("leftRightBlup");
                 blupTypes.add("upLeftBlup");
                 blupTypes.add("downLeftBlup");
@@ -106,7 +102,6 @@ public class Blup extends Actor {
         if(nextCell.getType() == CellType.FLOOR
                 && nextCell.getType() != CellType.ITEM
                 && !nextCell.isAttackable()){
-            System.out.println("try to grow " +blupType);
             new Blup(nextCell, blupType);
             return true;
         }
