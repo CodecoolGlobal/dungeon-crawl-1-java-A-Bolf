@@ -79,7 +79,7 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), actionEvent -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
             moveAllMonster();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
