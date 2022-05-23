@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
+import java.io.File;
+
 import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -32,6 +34,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +136,7 @@ public class Main extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
 
-            //moveAllMonster();
+            moveAllMonster();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -146,7 +149,6 @@ public class Main extends Application {
         maxVertical();
         refresh();
     }
-
 
     private void maxHorizontal(){
         for(int i = 0; (i*36)+windowWidth<=map.getWidth()*36;i++){
@@ -162,9 +164,6 @@ public class Main extends Application {
 
     }
 
-
-    /*private void moveAllMonster() {
-        List<Blup> blups = map.getBlups();
 
 
     private void moveAllMonster() {
@@ -199,7 +198,7 @@ public class Main extends Application {
                     changeMap();
                     break;
                 }
-                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*32)) {
+                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*oneSquare)+oneSquare) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
                     }
@@ -227,7 +226,7 @@ public class Main extends Application {
                     changeMap();
                     break;
                 }
-                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*oneSquare) < (map.getWidth()*32)){
+                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*oneSquare) < (map.getWidth()*oneSquare)+oneSquare){
                     if(Player.collised(1,0)){
                         refreshHorizontal++;}
                 }
@@ -260,26 +259,28 @@ public class Main extends Application {
         inventoryLabel.setText(Player.getInventoryContents());
     }
 
-
     private void setStarterValues() {
 
         if (Player.getHorizontal() > 22) {
             refreshHorizontal = Player.getHorizontal() - 22;
             if ((refreshHorizontal*oneSquare)+windowWidth >map.getWidth()*oneSquare) {
-                refreshHorizontal = maxrefreshHorizontal;
+                refreshHorizontal = maxrefreshHorizontal-4;
             }
         }else if(refreshHorizontal != 0){
             refreshHorizontal = 0;
         }
-        if (Player.getVertical() > 12) {
+        if(Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
             if ((refreshVertical*oneSquare)+windowHeight >map.getHeight()*oneSquare) {
-                refreshHorizontal = maxrefreshHorizontal;
+                refreshVertical = maxrerefreshVertical-1;
             }
         }else if(refreshVertical != 0){
             refreshVertical = 0;
         }
     }
+
+
+
 
     private  void changeMap(){
         if(mapNow==0){
@@ -289,9 +290,9 @@ public class Main extends Application {
             map = MapLoader.loadMap("/map2.txt");
             mapNow=0;
         }
-        setStarterValues();
         maxHorizontal();
         maxVertical();
+        setStarterValues();
         refresh();
     }
 }
