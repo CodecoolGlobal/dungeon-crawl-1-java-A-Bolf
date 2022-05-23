@@ -4,6 +4,8 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
+import java.io.File;
+
 import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -11,6 +13,9 @@ import javafx.animation.Timeline;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,6 +34,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.print.attribute.standard.Media;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +47,8 @@ public class Main extends Application {
     private int maxrerefreshVertical = 0;
     private byte mapNow = 0;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-    private int windowHeight = (int) primaryScreenBounds.getHeight();
-    private int windowWidth = (int) primaryScreenBounds.getWidth();
+    private int windowHeight = (int)primaryScreenBounds.getHeight();
+    private int windowWidth = (int)primaryScreenBounds.getWidth();
     private int oneSquare = 32;
 
     GameMap map = MapLoader.loadMap("/map2.txt");
@@ -95,8 +101,7 @@ public class Main extends Application {
 
 
     }
-
-    private void printMe() {
+    private void printMe(){
         System.out.println(primaryScreenBounds);
     }
 
@@ -131,7 +136,7 @@ public class Main extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
 
-            //moveAllMonster();
+            moveAllMonster();
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
@@ -145,24 +150,23 @@ public class Main extends Application {
         refresh();
     }
 
-
-    private void maxHorizontal() {
-        for (int i = 0; (i * 36) + windowWidth <= map.getWidth() * 36; i++) {
-            maxrefreshHorizontal = i;
+    private void maxHorizontal(){
+        for(int i = 0; (i*36)+windowWidth<=map.getWidth()*36;i++){
+            maxrefreshHorizontal=i;
         }
     }
 
 
-    private void maxVertical() {
-        for (int i = 0; (i * 36) + windowHeight <= map.getHeight() * 36; i++) {
-            maxrerefreshVertical = i;
+    private void maxVertical(){
+        for(int i = 0; (i*36)+windowHeight<= map.getHeight()*36;i++){
+            maxrerefreshVertical=i;
         }
 
     }
+
 
 
     private void moveAllMonster() {
-        //List<Blup> blups = map.getBlups(); //todo: add blups
         List<Monster> monsters = map.getMonsters();
         for (Monster monster :
                 monsters) {
@@ -176,11 +180,11 @@ public class Main extends Application {
             case UP:
                 printMe();
                 map.getPlayer().move(0, -1);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (refreshVertical > 0 && Player.getVertical() < map.getHeight() - 12) {
+                if(refreshVertical>0 && Player.getVertical()<map.getHeight() - 12) {
                     if (Player.collised(0, -1)) {
                         refreshVertical--;
                     }
@@ -190,11 +194,11 @@ public class Main extends Application {
             case DOWN:
                 printMe();
                 map.getPlayer().move(0, 1);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (Player.getVertical() > 11 && Player.getVertical() < map.getHeight() - 10 && windowHeight + (refreshVertical * oneSquare) < (map.getHeight() * 32)) {
+                if(Player.getVertical()>11 && Player.getVertical()< map.getHeight()-10 && windowHeight + (refreshVertical*oneSquare) < (map.getHeight()*oneSquare)+oneSquare) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
                     }
@@ -204,11 +208,11 @@ public class Main extends Application {
             case LEFT:
                 printMe();
                 map.getPlayer().move(-1, 0);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (refreshHorizontal > 0 && Player.getHorizontal() < map.getWidth() - 22) {
+                if(refreshHorizontal>0 && Player.getHorizontal()<map.getWidth()-22) {
                     if (Player.collised(-1, 0)) {
                         refreshHorizontal--;
                     }
@@ -217,21 +221,19 @@ public class Main extends Application {
                 break;
             case RIGHT:
                 printMe();
-                map.getPlayer().move(1, 0);
-                if (passage()) {
+                map.getPlayer().move(1,0);
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (Player.getHorizontal() > 21 && Player.getHorizontal() < map.getWidth() - 18 && windowWidth + (refreshHorizontal * oneSquare) < (map.getWidth() * 32)) {
-                    if (Player.collised(1, 0)) {
-                        refreshHorizontal++;
-                    }
+                if(Player.getHorizontal()>21 && Player.getHorizontal() <map.getWidth()-18 && windowWidth + (refreshHorizontal*oneSquare) < (map.getWidth()*oneSquare)+oneSquare){
+                    if(Player.collised(1,0)){
+                        refreshHorizontal++;}
                 }
                 refresh();
                 break;
         }
     }
-
 
     private void refresh() {
         buttonDisplay();
@@ -257,38 +259,40 @@ public class Main extends Application {
         inventoryLabel.setText(Player.getInventoryContents());
     }
 
-
     private void setStarterValues() {
 
         if (Player.getHorizontal() > 22) {
             refreshHorizontal = Player.getHorizontal() - 22;
-            if ((refreshHorizontal * oneSquare) + windowWidth > map.getWidth() * oneSquare) {
-                refreshHorizontal = maxrefreshHorizontal;
+            if ((refreshHorizontal*oneSquare)+windowWidth >map.getWidth()*oneSquare) {
+                refreshHorizontal = maxrefreshHorizontal-4;
             }
-        } else if (refreshHorizontal != 0) {
+        }else if(refreshHorizontal != 0){
             refreshHorizontal = 0;
         }
-        if (Player.getVertical() > 12) {
+        if(Player.getVertical() > 12) {
             refreshVertical = Player.getVertical() - 12;
-            if ((refreshVertical * oneSquare) + windowHeight > map.getHeight() * oneSquare) {
-                refreshHorizontal = maxrefreshHorizontal;
+            if ((refreshVertical*oneSquare)+windowHeight >map.getHeight()*oneSquare) {
+                refreshVertical = maxrerefreshVertical-1;
             }
-        } else if (refreshVertical != 0) {
+        }else if(refreshVertical != 0){
             refreshVertical = 0;
         }
     }
 
-    private void changeMap() {
-        if (mapNow == 0) {
+
+
+
+    private  void changeMap(){
+        if(mapNow==0){
             map = MapLoader.loadMap("/map3.txt");
-            mapNow = 1;
-        } else {
+            mapNow=1;
+        }else {
             map = MapLoader.loadMap("/map2.txt");
-            mapNow = 0;
+            mapNow=0;
         }
-        setStarterValues();
         maxHorizontal();
         maxVertical();
+        setStarterValues();
         refresh();
     }
 }
