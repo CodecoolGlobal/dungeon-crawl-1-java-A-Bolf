@@ -108,6 +108,8 @@ public class Player extends Actor implements CanPickupItems {
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
                 return false;
+            }else if(nextCell.getType() == CellType.DOOR){
+            return false;
             }
            return true;
         }
@@ -134,6 +136,8 @@ public class Player extends Actor implements CanPickupItems {
     public static int getVertical() {
         return vertical;
     }
+
+
 
 
 
