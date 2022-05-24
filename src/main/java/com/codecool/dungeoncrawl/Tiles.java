@@ -34,6 +34,7 @@ public class Tiles {
         tileMap.put("food", new Tile(11,11));
         tileMap.put("ogre", new Tile(30, 6));
         tileMap.put("mainBlup",new Tile(14, 5));
+        tileMap.put("fourWayBlup", new Tile(8,3));
         tileMap.put("upDownBlup",new Tile(12,5));
         tileMap.put("leftRightBlup",new Tile(12, 3));
         tileMap.put("downRightBlup",new Tile(13, 5));
