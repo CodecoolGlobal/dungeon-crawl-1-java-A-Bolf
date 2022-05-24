@@ -160,21 +160,6 @@ public class Main extends Application {
     }
 
 
-
-    private void maxHorizontal(){
-        for(int i = 0; (i*36)+windowWidth<=map.getWidth()*36;i++){
-            maxrefreshHorizontal=i;
-        }
-    }
-
-
-    private void maxVertical(){
-        for(int i = 0; (i*36)+windowHeight<= map.getHeight()*36;i++){
-            maxrerefreshVertical=i;
-        }
-
-    }
-
     private void createNewMonsterThread(Class<?> monsterType, int frequency){
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(frequency), actionEvent -> {
             moveAllMonster(monsterType);
@@ -192,19 +177,6 @@ public class Main extends Application {
         refresh();
     }
 
-
-    /*private void moveAllMonster() {
-        List<Blup> blups = map.getBlups();
-
-
-    private void moveAllMonster() {
-        List<Monster> monsters = map.getMonsters();
-        for (Monster monster :
-                monsters) {
-            monster.moveMonsters(map.getPlayer());
-        }
-        refresh();
-    }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {

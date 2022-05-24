@@ -47,11 +47,9 @@ public class GameMap {
     }
 
     public List<Monster> getMonsters(Class<?> monsterType) {
-        System.out.println(monsterType);
         List<Monster> monsters = new ArrayList<>();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                System.out.println(cells[x][y].getActor());
                 if (cells[x][y].getActor() != null && cells[x][y].getActor().getClass().equals(monsterType)) {
                     Monster temp = (Monster) cells[x][y].getActor();
                     monsters.add(temp);
