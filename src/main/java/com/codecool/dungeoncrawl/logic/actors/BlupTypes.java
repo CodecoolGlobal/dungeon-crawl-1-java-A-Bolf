@@ -1,15 +1,15 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 public enum BlupTypes {
-    MAIN("mainBlup", false) {
+    MAIN("mainBlup") {
         @Override
         public BlupGrowSide[] getGrowSides() {
             return new BlupGrowSide[]{BlupGrowSide.LEFT, BlupGrowSide.RIGHT};
         }
     },
-    FOUR_WAY("fourWayBlup"){
+    FOUR_WAY("fourWayBlup") {
         @Override
-        public BlupGrowSide[] getGrowSides(){
+        public BlupGrowSide[] getGrowSides() {
             return new BlupGrowSide[]{BlupGrowSide.UP, BlupGrowSide.DOWN, BlupGrowSide.LEFT, BlupGrowSide.RIGHT};
         }
     },
@@ -51,27 +51,14 @@ public enum BlupTypes {
     };
 
     private final String stringName;
-    private boolean autoGrow = true;
-
-    BlupTypes(String stringName, boolean autoGrow) {
-        this.stringName = stringName;
-        this.autoGrow = autoGrow;
-    }
 
     BlupTypes(String stringName) {
-        this.stringName = stringName;}
-
-        public String getStringName () {
-            return stringName;
-        }
-
-        public void turnInAutoGrow () {
-            autoGrow = true;
-        }
-
-        public boolean isAutoGrow () {
-            return autoGrow;
-        }
-
-        public abstract BlupGrowSide[] getGrowSides ();
+        this.stringName = stringName;
     }
+
+    public String getStringName() {
+        return stringName;
+    }
+
+    public abstract BlupGrowSide[] getGrowSides();
+}

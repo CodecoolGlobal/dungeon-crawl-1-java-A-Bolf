@@ -132,7 +132,7 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
         createNewMonsterThread(Skeleton.class, 1000);
-        createNewMonsterThread(Ogre.class, 600);
+        createNewMonsterThread(Ogre.class, 550);
         createNewMonsterThread(Blup.class, 1200);
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
