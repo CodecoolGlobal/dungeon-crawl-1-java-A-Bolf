@@ -40,8 +40,8 @@ public class Main extends Application {
     private int maxrefreshVertical = 0;
     private byte mapNow = 0;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-    private int windowHeight;
-    private int windowWidth;
+    private int windowHeight = (int) primaryScreenBounds.getHeight();
+    private int windowWidth = (int) primaryScreenBounds.getWidth();
     private int oneSquare = 32;
     private Stage pStage;
 
@@ -101,8 +101,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         pStage = primaryStage;
-        windowHeight = (int) primaryStage.getHeight();
-        windowWidth = (int) primaryStage.getWidth();
         initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -142,14 +140,14 @@ public class Main extends Application {
     }
 
     private void maxHorizontal() {
-        maxrefreshHorizontal = (map.getWidth() * oneSquare) / oneSquare;
+        maxrefreshHorizontal = (map.getWidth() * oneSquare -windowWidth) / oneSquare;
 
     }
 
 
     private void maxVertical() {
-        int plusVerticalSpaceBecauseUi = 1;
-        maxrefreshVertical = (map.getHeight() * oneSquare) / oneSquare + plusVerticalSpaceBecauseUi;
+        int plusVerticalSpaceBecauseUi = 2;
+        maxrefreshVertical = (map.getHeight() * oneSquare - windowHeight) / oneSquare + plusVerticalSpaceBecauseUi;
 
     }
 
@@ -201,6 +199,8 @@ public class Main extends Application {
                     }
                 }
                 int a = Player.getVertical();
+                int c = maxrefreshVertical;
+                int b = refreshVertical;
                 refresh();
                 break;
             case LEFT:
@@ -229,15 +229,14 @@ public class Main extends Application {
                         refreshHorizontal++;
                     }
                 }
+                int c1 = maxrefreshHorizontal;
+                int b1 = windowWidth;
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
-//        pStage.sizeToScene();
-        windowHeight = (int) pStage.getHeight();
-        windowWidth = (int) pStage.getWidth();
         buttonDisplay();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
