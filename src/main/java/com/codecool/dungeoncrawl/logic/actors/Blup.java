@@ -13,21 +13,23 @@ public class Blup extends Monster {
     private final BlupTypes blupType;
     private static final Random random = new Random();
     private BlupTypes[] possibleBlupTypes;
+    private boolean isAutoGrow;
 
-    public Blup(Cell cell, BlupTypes blupType) {
+    public Blup(Cell cell, BlupTypes blupType, boolean isAutoGrow) {
         super(cell, 5, 1);
         this.cell = cell;
         this.blupType = blupType;
+        this.isAutoGrow = isAutoGrow;
     }
 
     public void grow(Player player) {
 
-        if(!blupType.isAutoGrow()){
+        if(!isAutoGrow){
             //Is Player near the blup
             if (Math.abs(getX() - player.getX()) < 5
                     && Math.abs(getY() - player.getY()) < 5) {
-                blupType.turnInAutoGrow();
-            }
+                isAutoGrow = true;
+                }
         }
         else{
             for (BlupGrowSide side :
@@ -54,7 +56,7 @@ public class Blup extends Monster {
         if(nextCell.getType() == CellType.FLOOR
                 && nextCell.getType() != CellType.ITEM
                 && !nextCell.isAttackable()){
-            new Blup(nextCell, newBlupType);
+            new Blup(nextCell, newBlupType, true);
         }
     }
 

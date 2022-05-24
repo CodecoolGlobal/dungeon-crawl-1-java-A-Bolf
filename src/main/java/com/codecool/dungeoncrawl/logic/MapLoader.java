@@ -61,7 +61,7 @@ public class MapLoader {
                             break;
                         case  'b':
                             cell.setType(CellType.FLOOR);
-                            new Blup(cell, BlupTypes.MAIN);
+                            new Blup(cell, BlupTypes.MAIN, false);
                             break;
                         case '@':
                             if(!dontPlacePlayerToStarter) {
