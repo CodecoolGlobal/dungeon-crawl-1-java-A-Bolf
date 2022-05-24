@@ -4,116 +4,57 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 public class Blup extends Monster {
     private Cell cell;
-    private final String name;
-    private boolean upSide = false;
-    private boolean downSide = false;
-    private boolean leftSide = false;
-    private boolean rightSide = false;
+    private final BlupTypes blupType;
     private static final Random random = new Random();
-    private List<String> blupTypes = new ArrayList<>();
+    private BlupTypes[] possibleBlupTypes;
 
-    public Blup(Cell cell, String name) {
+    public Blup(Cell cell, BlupTypes blupType) {
         super(cell, 5, 1);
         this.cell = cell;
-        this.name = name;
-        switch (name) {
-            case "mainBlup":
-            case "leftRightBlup":
-                leftSide = true;
-                rightSide = true;
-                break;
-            case "upDownBlup":
-                upSide = true;
-                downSide = true;
-                break;
-            case "upLeftBlup":
-                upSide = true;
-                leftSide = true;
-                break;
-            case "upRightBlup":
-                upSide = true;
-                rightSide = true;
-                break;
-            case "downLeftBlup":
-                downSide = true;
-                leftSide = true;
-                break;
-            case "downRightBlup":
-                downSide = true;
-                rightSide = true;
-                break;
-        }
+        this.blupType = blupType;
     }
 
     public void grow(Player player) {
-        int dX = 0;
-        int dY = 0;
-        boolean side;
-        System.out.println("-------------------------------------");
-        if (Math.abs(getX() - player.getX()) < 5
-                && Math.abs(getY() - player.getY()) < 5) {
-            if(upSide){
-                blupTypes.add("upDownBlup");
-                blupTypes.add("downRightBlup");
-                blupTypes.add("downLeftBlup");
-                dY = -1;
-                move(dX,dY);
-                dY = 0;
 
+        if(!blupType.isAutoGrow()){
+            //Is Player near the blup
+            if (Math.abs(getX() - player.getX()) < 5
+                    && Math.abs(getY() - player.getY()) < 5) {
+                blupType.turnInAutoGrow();
             }
-            if(downSide){
-                blupTypes.clear();
-                blupTypes.add("upDownBlup");
-                blupTypes.add("upRightBlup");
-                blupTypes.add("upLeftBlup");
-                dY = 1;
-                move(dX,dY);
-                dY = 0;
-
+        }
+        else{
+            for (BlupGrowSide side :
+                    blupType.getGrowSides()) {
+                possibleBlupTypes = side.getPossibleBlupTypes();
+                move(side.getxModifier(), side.getyModifier());
             }
-            if(leftSide){
-                blupTypes.clear();
-                System.out.println("left side");
-                blupTypes.add("leftRightBlup");
-                blupTypes.add("upRightBlup");
-                blupTypes.add("downRightBlup");
-                dX = -1;
-                move(dX,dY);
-                dX = 0;
-            }
-            if(rightSide){
-                blupTypes.clear();
-                System.out.println("right side");
-                System.out.println(blupTypes);
-                blupTypes.add("leftRightBlup");
-                blupTypes.add("upLeftBlup");
-                blupTypes.add("downLeftBlup");
-                dX = 1;
-                move(dX,dY);
-            }
-
         }
     }
 
     @Override
     public String getTileName() {
-        return name;
+        return blupType.getStringName();
     }
 
     @Override
     public void move(int dX, int dY) {
         Cell nextCell = cell.getNeighbor(dX,dY);
-        String blupType = blupTypes.get(random.nextInt(blupTypes.size()));
+        BlupTypes newBlupType = possibleBlupTypes[random.nextInt(possibleBlupTypes.length)];
+        // 12% chance to grow a four way Blup
+        if (random.nextInt(100) <= 12){
+            newBlupType = BlupTypes.FOUR_WAY;
+        }
         if(nextCell.getType() == CellType.FLOOR
                 && nextCell.getType() != CellType.ITEM
                 && !nextCell.isAttackable()){
-            System.out.println("try to grow " +blupType);
-            new Blup(nextCell, blupType);
+            new Blup(nextCell, newBlupType);
         }
     }
 
