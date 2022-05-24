@@ -101,6 +101,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         pStage = primaryStage;
+        windowHeight = (int) primaryStage.getHeight();
+        windowWidth = (int) primaryStage.getWidth();
         initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -199,8 +201,6 @@ public class Main extends Application {
                     }
                 }
                 int a = Player.getVertical();
-                int c = maxrefreshVertical;
-                int b = refreshVertical;
                 refresh();
                 break;
             case LEFT:
@@ -229,14 +229,15 @@ public class Main extends Application {
                         refreshHorizontal++;
                     }
                 }
-                int c1 = maxrefreshHorizontal;
-                int b1 = windowWidth;
                 refresh();
                 break;
         }
     }
 
     private void refresh() {
+//        pStage.sizeToScene();
+        windowHeight = (int) pStage.getHeight();
+        windowWidth = (int) pStage.getWidth();
         buttonDisplay();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
