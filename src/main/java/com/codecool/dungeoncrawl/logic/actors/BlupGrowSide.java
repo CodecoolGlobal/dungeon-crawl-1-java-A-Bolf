@@ -1,24 +1,41 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 public enum BlupGrowSide {
-    UP(new BlupTypes[]{BlupTypes.UP_DOWN, BlupTypes.DOWN_LEFT, BlupTypes.DOWN_RIGHT}, 0, -1),
-    DOWN(new BlupTypes[]{BlupTypes.UP_DOWN, BlupTypes.UP_LEFT, BlupTypes.UP_RIGHT}, 0, 1),
-    LEFT(new BlupTypes[]{BlupTypes.LEFT_RIGHT, BlupTypes.UP_RIGHT, BlupTypes.DOWN_RIGHT}, -1, 0),
-    RIGHT(new BlupTypes[]{BlupTypes.LEFT_RIGHT, BlupTypes.UP_LEFT, BlupTypes.DOWN_RIGHT}, 1, 0);
+    UP(0, -1){
+        @Override
+        public BlupTypes[] getPossibleBlupTypes(){
+            return new BlupTypes[]{BlupTypes.UP_DOWN, BlupTypes.DOWN_LEFT, BlupTypes.DOWN_RIGHT};
+        }
+    },
+    DOWN( 0, 1){
+        @Override
+        public BlupTypes[] getPossibleBlupTypes(){
+            return new BlupTypes[]{BlupTypes.UP_DOWN, BlupTypes.UP_LEFT, BlupTypes.UP_RIGHT};
+        }
+    },
+    LEFT( -1, 0){
+        @Override
+        public BlupTypes[] getPossibleBlupTypes(){
+            return new BlupTypes[]{BlupTypes.LEFT_RIGHT, BlupTypes.UP_RIGHT, BlupTypes.DOWN_RIGHT};
+        }
+    },
+    RIGHT(1, 0){
+        @Override
+        public BlupTypes[] getPossibleBlupTypes(){
+            return new BlupTypes[]{BlupTypes.LEFT_RIGHT, BlupTypes.UP_LEFT, BlupTypes.DOWN_LEFT};
+        }
+    };
 
-    private final BlupTypes[] possibleBlupTypes;
     private final int xModifier;
     private final int yModifier;
+    private BlupTypes[] blupTypes;
 
-    BlupGrowSide(BlupTypes[] possibleBlupTypes, int xModifier, int yModifier){
-        this.possibleBlupTypes = possibleBlupTypes;
+    BlupGrowSide(int xModifier, int yModifier){
         this.xModifier = xModifier;
         this.yModifier = yModifier;
     }
 
-    public BlupTypes[] getPossibleBlupTypes() {
-        return possibleBlupTypes;
-    }
+    public abstract BlupTypes[] getPossibleBlupTypes();
 
     public int getxModifier() {
         return xModifier;
