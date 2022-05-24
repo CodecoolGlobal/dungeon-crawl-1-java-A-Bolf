@@ -96,6 +96,8 @@ public class Main extends Application {
         System.out.println(pStage.getHeight());
         System.out.println(pStage.getWidth());
         System.out.println(primaryScreenBounds);
+        System.out.println(maxrefreshVertical);
+        System.out.println(maxrefreshHorizontal);
     }
 
     @Override
@@ -173,62 +175,61 @@ public class Main extends Application {
 
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        Cell cell;
         switch (keyEvent.getCode()) {
             case UP:
                 printMe();
+                cell= map.getCell(map.getPlayer().getX(), map.getPlayer().getY());
                 map.getPlayer().move(0, -1);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (refreshVertical > 0 && Player.getVertical() * oneSquare < map.getHeight() * oneSquare - windowHeight / 2) {
-                    if (Player.collised(0, -1)) {
+                    if (cell.isWalkable()&&!cell.isAttackable()) {
                         refreshVertical--;
-                    }
+
                 }
                 refresh();
                 break;
             case DOWN:
                 printMe();
+                cell= map.getCell(map.getPlayer().getX(), map.getPlayer().getY());
                 map.getPlayer().move(0, 1);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (Player.getVertical() * oneSquare > windowHeight / 2 && refreshVertical < maxrefreshVertical) {
-                    if (Player.collised(0, 1)) {
+                if (cell.isWalkable()&&!cell.isAttackable()) {
                         refreshVertical++;
                     }
-                }
+
                 int a = Player.getVertical();
                 refresh();
                 break;
             case LEFT:
                 printMe();
+                cell= map.getCell(map.getPlayer().getX(), map.getPlayer().getY());
                 map.getPlayer().move(-1, 0);
-                if (passage()) {
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (refreshHorizontal > 0 && Player.getHorizontal() * oneSquare < map.getWidth() * oneSquare - windowWidth / 2) {
-                    if (Player.collised(-1, 0)) {
+                if (cell.isWalkable()&&!cell.isAttackable()){
                         refreshHorizontal--;
                     }
-                }
+
                 refresh();
                 break;
             case RIGHT:
                 printMe();
-                map.getPlayer().move(1, 0);
-                if (passage()) {
+                cell= map.getCell(map.getPlayer().getX(), map.getPlayer().getY());
+                map.getPlayer().move(1,0);
+                if(passage()){
                     changeMap();
                     break;
                 }
-                if (refreshHorizontal <= maxrefreshHorizontal && Player.getHorizontal() * oneSquare > windowWidth / 2) {
-                    if (Player.collised(1, 0)) {
-                        refreshHorizontal++;
-                    }
-                }
+                if (cell.isWalkable()&&!cell.isAttackable()){
+                        refreshHorizontal++;}
                 refresh();
                 break;
         }
@@ -236,6 +237,7 @@ public class Main extends Application {
 
     private void refresh() {
 //        pStage.sizeToScene();
+//        setStarterValues();
         windowHeight = (int) pStage.getHeight();
         windowWidth = (int) pStage.getWidth();
         buttonDisplay();
@@ -263,22 +265,43 @@ public class Main extends Application {
 
     private void setStarterValues() {
 
-        if (Player.getHorizontal() * oneSquare > windowWidth / 2) {
-            refreshHorizontal = (Player.getHorizontal() * oneSquare - windowWidth / 2) / oneSquare;
-            if (refreshHorizontal > maxrefreshHorizontal) {
-                refreshHorizontal = maxrefreshHorizontal;
-            }
-        } else if (refreshHorizontal != 0) {
-            refreshHorizontal = 0;
-        }
-        if (Player.getVertical() * oneSquare > windowHeight / 2) {
-            refreshVertical = (Player.getVertical() * oneSquare - windowHeight / 2) / oneSquare;
-            if (refreshVertical > maxrefreshVertical) {
-                refreshVertical = maxrefreshVertical;
-            }
-        } else if (refreshVertical != 0) {
+//        if (Player.getHorizontal()*oneSquare > windowWidth/2) {
+//            refreshHorizontal = (Player.getHorizontal()*oneSquare - windowWidth/2)/oneSquare;
+//            if (refreshHorizontal>maxrefreshHorizontal) {
+//                refreshHorizontal = maxrefreshHorizontal;
+//            }
+//        }else if(refreshHorizontal != 0){
+//            refreshHorizontal = 0;
+//        }
+//        if(Player.getVertical()*oneSquare > windowHeight/2) {
+//            refreshVertical = (Player.getVertical()*oneSquare - windowHeight/2)/oneSquare;
+//            if (refreshVertical>maxrefreshVertical) {
+//                refreshVertical = maxrefreshVertical;
+//            }
+//        }else if(refreshVertical != 0){
+//            refreshVertical = 0;
+//        }
+        windowHeight= (int) pStage.getHeight();
+        windowWidth = (int) pStage.getWidth();
+        maxrefreshHorizontal=map.getWidth();
+        maxrefreshVertical=map.getHeight();
+
+        refreshVertical = Player.getVertical()-windowHeight/2/oneSquare;
+        if (refreshVertical<0) {
             refreshVertical = 0;
         }
+        System.out.println(refreshVertical+"vertical");
+        refreshHorizontal = Player.getHorizontal()-windowWidth/2/oneSquare;
+        if (refreshHorizontal<0) {
+            refreshHorizontal = 0;
+        }
+        System.out.println(refreshHorizontal+"horizontal");
+//        if (refreshVertical>maxrefreshVertical) {
+//            refreshVertical = Player.getVertical();
+//        }
+//        if (refreshHorizontal>maxrefreshHorizontal) {
+//            refreshHorizontal = Player.getHorizontal();
+//        }
     }
 
 
@@ -290,8 +313,6 @@ public class Main extends Application {
             map = MapLoader.loadMap("/map2.txt");
             mapNow = 0;
         }
-        maxHorizontal();
-        maxVertical();
         setStarterValues();
         maxHorizontal();
         maxVertical();
