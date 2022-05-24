@@ -4,8 +4,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
-import java.io.File;
-
 import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -13,9 +11,6 @@ import javafx.animation.Timeline;
 
 import com.codecool.dungeoncrawl.logic.actors.Player;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,8 +29,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.print.attribute.standard.Media;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
@@ -44,12 +37,13 @@ public class Main extends Application {
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
     private int maxrefreshHorizontal = 0;
-    private int maxrerefreshVertical = 0;
+    private int maxrefreshVertical = 0;
     private byte mapNow = 0;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-    private int windowHeight = (int)primaryScreenBounds.getHeight();
-    private int windowWidth = (int)primaryScreenBounds.getWidth();
+    private int windowHeight;
+    private int windowWidth;
     private int oneSquare = 32;
+    private Stage pStage;
 
     GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
@@ -83,13 +77,10 @@ public class Main extends Application {
 
     private void buttonDisplay() {
         Cell cell = map.getPlayer().getCell();
-        System.out.println("Cell: " + cell);
         if (cell.hasItem()) {
             ui.add(btn, 0, 10);
             btn.setVisible(true);
-            System.out.println("Button SHOW");
         } else {
-            System.out.println("Button attempt to HIDE");
             try {
                 btn.setVisible(false);
                 ui.getChildren().remove(btn);
@@ -97,16 +88,21 @@ public class Main extends Application {
                 System.out.println(e);
             }
         }
-        System.out.println(ui.getChildren());
 
 
     }
-    private void printMe(){
+
+    private void printMe() {
+        System.out.println(pStage.getHeight());
+        System.out.println(pStage.getWidth());
         System.out.println(primaryScreenBounds);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        pStage = primaryStage;
+        windowHeight = (int) primaryStage.getHeight();
+        windowWidth = (int) primaryStage.getWidth();
         initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
@@ -140,7 +136,7 @@ public class Main extends Application {
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
-
+        primaryStage.sizeToScene();
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
@@ -150,19 +146,18 @@ public class Main extends Application {
         refresh();
     }
 
-    private void maxHorizontal(){
-        maxrefreshHorizontal=(map.getWidth()*oneSquare-windowWidth)/oneSquare;
+    private void maxHorizontal() {
+        maxrefreshHorizontal = (map.getWidth() * oneSquare) / oneSquare;
 
     }
 
 
-    private void maxVertical(){
+    private void maxVertical() {
         int plusVerticalSpaceBecauseUi = 1;
-        maxrerefreshVertical = (map.getHeight()*oneSquare-windowHeight)/oneSquare+plusVerticalSpaceBecauseUi;
+        maxrefreshVertical = (map.getHeight() * oneSquare) / oneSquare + plusVerticalSpaceBecauseUi;
 
 
     }
-
 
 
     private void moveAllMonster() {
@@ -179,11 +174,11 @@ public class Main extends Application {
             case UP:
                 printMe();
                 map.getPlayer().move(0, -1);
-                if(passage()){
+                if (passage()) {
                     changeMap();
                     break;
                 }
-                if(refreshVertical>0 && Player.getVertical()*oneSquare <map.getHeight()*oneSquare - windowHeight/2) {
+                if (refreshVertical > 0 && Player.getVertical() * oneSquare < map.getHeight() * oneSquare - windowHeight / 2) {
                     if (Player.collised(0, -1)) {
                         refreshVertical--;
                     }
@@ -193,11 +188,11 @@ public class Main extends Application {
             case DOWN:
                 printMe();
                 map.getPlayer().move(0, 1);
-                if(passage()){
+                if (passage()) {
                     changeMap();
                     break;
                 }
-                if(Player.getVertical()*oneSquare > windowHeight/2 && refreshVertical <= maxrerefreshVertical) {
+                if (Player.getVertical() * oneSquare > windowHeight / 2 && refreshVertical < maxrefreshVertical) {
                     if (Player.collised(0, 1)) {
                         refreshVertical++;
                     }
@@ -208,11 +203,11 @@ public class Main extends Application {
             case LEFT:
                 printMe();
                 map.getPlayer().move(-1, 0);
-                if(passage()){
+                if (passage()) {
                     changeMap();
                     break;
                 }
-                if(refreshHorizontal>0 && Player.getHorizontal()*oneSquare< map.getWidth()*oneSquare - windowWidth/2) {
+                if (refreshHorizontal > 0 && Player.getHorizontal() * oneSquare < map.getWidth() * oneSquare - windowWidth / 2) {
                     if (Player.collised(-1, 0)) {
                         refreshHorizontal--;
                     }
@@ -221,14 +216,15 @@ public class Main extends Application {
                 break;
             case RIGHT:
                 printMe();
-                map.getPlayer().move(1,0);
-                if(passage()){
+                map.getPlayer().move(1, 0);
+                if (passage()) {
                     changeMap();
                     break;
                 }
-                if(refreshHorizontal<=maxrefreshHorizontal && Player.getHorizontal()*oneSquare > windowWidth/2){
-                    if(Player.collised(1,0)){
-                        refreshHorizontal++;}
+                if (refreshHorizontal <= maxrefreshHorizontal && Player.getHorizontal() * oneSquare > windowWidth / 2) {
+                    if (Player.collised(1, 0)) {
+                        refreshHorizontal++;
+                    }
                 }
                 refresh();
                 break;
@@ -236,6 +232,9 @@ public class Main extends Application {
     }
 
     private void refresh() {
+//        pStage.sizeToScene();
+        windowHeight = (int) pStage.getHeight();
+        windowWidth = (int) pStage.getWidth();
         buttonDisplay();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
@@ -261,34 +260,32 @@ public class Main extends Application {
 
     private void setStarterValues() {
 
-        if (Player.getHorizontal()*oneSquare > windowWidth/2) {
-            refreshHorizontal = (Player.getHorizontal()*oneSquare - windowWidth/2)/oneSquare;
-            if (refreshHorizontal>maxrefreshHorizontal) {
+        if (Player.getHorizontal() * oneSquare > windowWidth / 2) {
+            refreshHorizontal = (Player.getHorizontal() * oneSquare - windowWidth / 2) / oneSquare;
+            if (refreshHorizontal > maxrefreshHorizontal) {
                 refreshHorizontal = maxrefreshHorizontal;
             }
-        }else if(refreshHorizontal != 0){
+        } else if (refreshHorizontal != 0) {
             refreshHorizontal = 0;
         }
-        if(Player.getVertical()*oneSquare > windowHeight/2) {
-            refreshVertical = (Player.getVertical()*oneSquare - windowHeight/2)/oneSquare;
-            if (refreshVertical>maxrerefreshVertical) {
-                refreshVertical = maxrerefreshVertical;
+        if (Player.getVertical() * oneSquare > windowHeight / 2) {
+            refreshVertical = (Player.getVertical() * oneSquare - windowHeight / 2) / oneSquare;
+            if (refreshVertical > maxrefreshVertical) {
+                refreshVertical = maxrefreshVertical;
             }
-        }else if(refreshVertical != 0){
+        } else if (refreshVertical != 0) {
             refreshVertical = 0;
         }
     }
 
 
-
-
-    private  void changeMap(){
-        if(mapNow==0){
+    private void changeMap() {
+        if (mapNow == 0) {
             map = MapLoader.loadMap("/map3.txt");
-            mapNow=1;
-        }else {
+            mapNow = 1;
+        } else {
             map = MapLoader.loadMap("/map2.txt");
-            mapNow=0;
+            mapNow = 0;
         }
         maxHorizontal();
         maxVertical();

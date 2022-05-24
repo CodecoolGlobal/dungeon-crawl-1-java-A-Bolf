@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -21,14 +22,14 @@ public class Player extends Actor implements CanPickupItems {
     private Key key;
 
 
-    public void setStart(Cell cell,int vertical,int horizontal){
+    public void setStart(Cell cell, int vertical, int horizontal) {
         this.cell = cell;
         this.vertical = vertical;
         this.horizontal = horizontal;
         cell.setActor(this);
     }
 
-    public Player(Cell cell,int vertical,int horizontal) {
+    public Player(Cell cell, int vertical, int horizontal) {
         super(cell, 100, 5);
         this.cell = cell;
         this.vertical = vertical;
@@ -60,15 +61,15 @@ public class Player extends Actor implements CanPickupItems {
             nextCell.setActor(this);
             cell = nextCell;
             super.cell = nextCell;
-            vertical=vertical+dy;
-            horizontal=horizontal+dx;
+            vertical = vertical + dy;
+            horizontal = horizontal + dx;
         }
     }
 
-    public static String getInventoryContents(){
-        String ret ="";
-        for (Item item : inventory){
-            ret+=item.toString()+" ";
+    public static String getInventoryContents() {
+        String ret = "";
+        for (Item item : inventory) {
+            ret += item.toString() + " ";
         }
         return ret;
     }
@@ -102,16 +103,15 @@ public class Player extends Actor implements CanPickupItems {
     }
 
 
-
     public static boolean collised(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.isWalkable()) {
             if (nextCell.isAttackable()) {
                 return false;
-            }else if(nextCell.getType() == CellType.DOOR){
-            return false;
+            } else if (nextCell.getType() == CellType.DOOR) {
+                return false;
             }
-           return true;
+            return true;
         }
         return false;
     }
@@ -136,10 +136,6 @@ public class Player extends Actor implements CanPickupItems {
     public static int getVertical() {
         return vertical;
     }
-
-
-
-
 
 
 }
