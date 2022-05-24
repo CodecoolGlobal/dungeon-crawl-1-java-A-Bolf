@@ -134,12 +134,9 @@ public class Main extends Application {
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1200), actionEvent -> {
-
-            moveAllMonster();
-        }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        createNewMonsterThread(Skeleton.class, 1000);
+        createNewMonsterThread(Ogre.class, 600);
+        createNewMonsterThread(Blup.class, 1200);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
@@ -163,10 +160,18 @@ public class Main extends Application {
 
     }
 
+    private void createNewMonsterThread(Class<?> monsterType, int frequency){
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(frequency), actionEvent -> {
+            moveAllMonster(monsterType);
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
 
 
-    private void moveAllMonster() {
-        List<Monster> monsters = map.getMonsters();
+
+    private void moveAllMonster(Class<?> monsterType) {
+        List<Monster> monsters = map.getMonsters(monsterType);
         for (Monster monster :
                 monsters) {
             monster.moveMonsters(map.getPlayer());
