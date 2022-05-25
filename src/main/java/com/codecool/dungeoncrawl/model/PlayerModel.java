@@ -1,26 +1,38 @@
 package com.codecool.dungeoncrawl.model;
 
+import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Item;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerModel extends BaseModel {
     private String playerName;
     private int hp;
     private int x;
     private int y;
+    private List<Item> inventory = new ArrayList<>();
 
-    public PlayerModel(String playerName, int x, int y) {
+    public PlayerModel(String playerName,int hp ,int x, int y) {
         this.playerName = playerName;
         this.x = x;
         this.y = y;
+        this.hp = hp;
     }
 
     public PlayerModel(Player player) {
-//        this.playerName = player.getName();
+        this.playerName = "player";
         this.x = player.getX();
         this.y = player.getY();
-
         this.hp = player.getHealth();
+        this.inventory=player.getInventory();
 
+    }
+    public List<Item> getInventory() {
+        return inventory;
     }
 
     public String getPlayerName() {
@@ -54,4 +66,12 @@ public class PlayerModel extends BaseModel {
     public void setY(int y) {
         this.y = y;
     }
+
+    public static PlayerModel fromString(String playerString) {
+        String[] playerData = playerString.split(",");
+        PlayerModel playerModel = new PlayerModel(playerData[0], Integer.parseInt(playerData[1]), Integer.parseInt(playerData[2]), Integer.parseInt(playerData[3]));
+        playerModel.inventory=SaveHandler.inventoryFromString(playerData[4]);
+        return playerModel;
+    }
+
 }

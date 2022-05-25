@@ -5,6 +5,9 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
 import com.codecool.dungeoncrawl.logic.actors.*;
+import com.codecool.dungeoncrawl.logic.items.Item;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.SaveHandler;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -29,6 +32,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
@@ -39,6 +44,8 @@ public class Main extends Application {
     private int maxrefreshHorizontal = 0;
     private int maxrefreshVertical = 0;
     private byte mapNow = 0;
+
+    private String currentMap;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
     private int windowHeight = (int) primaryScreenBounds.getHeight();
     private int windowWidth = (int) primaryScreenBounds.getWidth();
@@ -64,33 +71,6 @@ public class Main extends Application {
         launch(args);
     }
 
-    private void initPickupButton() {
-        btn = new Button("Pick Up Item");
-        btn.setFocusTraversable(false);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            map.getPlayer().pickUpItem(map.getPlayer().getCell());
-            updateLabels();
-            ui.getChildren().remove(btn);
-            borderPane.requestFocus();
-        });
-    }
-
-    private void buttonDisplay() {
-        Cell cell = map.getPlayer().getCell();
-        if (cell.hasItem()) {
-            ui.add(btn, 0, 10);
-            btn.setVisible(true);
-        } else {
-            try {
-                btn.setVisible(false);
-                ui.getChildren().remove(btn);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-
-
-    }
 
     private void printMe() {
         System.out.println(pStage.getHeight());
@@ -100,8 +80,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        currentMap = "map2";
         pStage = primaryStage;
-        initPickupButton();
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
         ui.add(new Label("Health: "), 0, 0);
@@ -120,10 +100,6 @@ public class Main extends Application {
 
 
         Scene scene = new Scene(borderPane);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            System.out.println("Clicked");
-            borderPane.requestFocus();
-        });
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
@@ -140,7 +116,7 @@ public class Main extends Application {
     }
 
     private void maxHorizontal() {
-        maxrefreshHorizontal = (map.getWidth() * oneSquare -windowWidth) / oneSquare;
+        maxrefreshHorizontal = (map.getWidth() * oneSquare - windowWidth) / oneSquare;
 
     }
 
@@ -151,7 +127,7 @@ public class Main extends Application {
     }
 
 
-    private void createNewMonsterThread(Class<?> monsterType, int frequency){
+    private void createNewMonsterThread(Class<?> monsterType, int frequency) {
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(frequency), actionEvent -> {
             moveAllMonster(monsterType);
         }));
@@ -227,11 +203,33 @@ public class Main extends Application {
                 }
                 refresh();
                 break;
+
+            case F:
+                try {
+                    SaveHandler.saveGame(currentMap, map.getPlayer());
+                } catch (IOException e) {
+                    System.out.println("save failed" + e);
+                }
+            case G:
+                System.out.println("G");
+                GameState loadedState = SaveHandler.loadGame();
+                restoreGameState(loadedState);
+                updateLabels();
+                refresh();
+                break;
+
         }
     }
 
+    private void restoreGameState(GameState gameState) {
+        Cell playercell = map.getCell(gameState.getPlayer().getX(), gameState.getPlayer().getY());
+        int playerHp = gameState.getPlayer().getHp();
+        List<Item> playerItems = gameState.getPlayer().getInventory();
+        map.setPlayer(new Player(playercell, playerHp, playerItems));
+        refresh();
+    }
+
     private void refresh() {
-        buttonDisplay();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -278,9 +276,11 @@ public class Main extends Application {
     private void changeMap() {
         if (mapNow == 0) {
             map = MapLoader.loadMap("/map3.txt");
+            currentMap = "map3";
             mapNow = 1;
         } else {
             map = MapLoader.loadMap("/map2.txt");
+            currentMap = "map2";
             mapNow = 0;
         }
         maxHorizontal();

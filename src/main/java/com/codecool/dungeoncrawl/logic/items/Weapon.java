@@ -10,6 +10,11 @@ public class Weapon extends Item{
         super.type=ItemType.SWORD;
         super.name="Sword";
     }
+    public Weapon() {
+        super();
+        super.type=ItemType.SWORD;
+        super.name="Sword";
+    }
  public int getDamage(){
         return damage;
     }

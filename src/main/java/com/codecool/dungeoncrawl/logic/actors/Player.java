@@ -11,14 +11,15 @@ import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Player extends Actor implements CanPickupItems {
     private static Cell cell;
     private static int vertical;
     private static int horizontal;
-    private static ArrayList<Item> inventory = new ArrayList<>();
-    private ArrayList<Consumable> consumables = new ArrayList<>();
-    private ArrayList<Weapon> weapons = new ArrayList<>();
+    private static List<Item> inventory = new ArrayList<>();
+    private List<Consumable> consumables = new ArrayList<>();
+    private List<Weapon> weapons = new ArrayList<>();
     private Key key;
 
 
@@ -35,12 +36,16 @@ public class Player extends Actor implements CanPickupItems {
         this.vertical = vertical;
         this.horizontal = horizontal;
     }
+    public Player(Cell cell, int hp, List<Item> inventory) {
+        super(cell, hp, 5);
+        this.cell = cell;
+        this.inventory = inventory;
+    }
 
     public Player(Cell cell) {
         super(cell, 100, 5);
         this.cell = cell;
     }
-
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
@@ -137,5 +142,7 @@ public class Player extends Actor implements CanPickupItems {
         return vertical;
     }
 
-
+    public List<Item> getInventory() {
+        return inventory;
+    }
 }

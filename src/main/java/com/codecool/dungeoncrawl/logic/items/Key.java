@@ -7,7 +7,15 @@ import com.codecool.dungeoncrawl.logic.DoorType;
 public class Key extends Item {
     public Key(Cell cell) {
         super(cell);
+        super.type = ItemType.KEY;
+        super.name = "key";
     }
+    public Key() {
+        super();
+        super.type = ItemType.KEY;
+        super.name = "key";
+    }
+
 public void openDoor(Cell cell) {
         cell.setType(CellType.DOOR);
         cell.setDoorStatus(DoorType.OPEN);

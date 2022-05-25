@@ -10,6 +10,11 @@ public class Consumable extends Item {
         super.type=ItemType.FOOD;
         super.name="apple";
     }
+    public Consumable() {
+        super();
+        super.type=ItemType.FOOD;
+        super.name="apple";
+    }
 
     public int getHealthValue() {
         return healthValue;
