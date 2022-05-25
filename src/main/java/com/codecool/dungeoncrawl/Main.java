@@ -1,9 +1,10 @@
 package com.codecool.dungeoncrawl;
 
+
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-
+import com.codecool.dungeoncrawl.view.Modal;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -55,7 +56,7 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     private GridPane ui = new GridPane();
     private BorderPane borderPane = new BorderPane();
-    Button btn;
+
     List<Skeleton> skeletons = MapLoader.getSkeletons();
     List<Ogre> ogres = MapLoader.getOgres();
 
@@ -64,33 +65,8 @@ public class Main extends Application {
         launch(args);
     }
 
-    private void initPickupButton() {
-        btn = new Button("Pick Up Item");
-        btn.setFocusTraversable(false);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            map.getPlayer().pickUpItem(map.getPlayer().getCell());
-            updateLabels();
-            ui.getChildren().remove(btn);
-            borderPane.requestFocus();
-        });
-    }
-
-    private void buttonDisplay() {
-        Cell cell = map.getPlayer().getCell();
-        if (cell.hasItem()) {
-            ui.add(btn, 0, 10);
-            btn.setVisible(true);
-        } else {
-            try {
-                btn.setVisible(false);
-                ui.getChildren().remove(btn);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
 
 
-    }
 
     private void printMe() {
         System.out.println(pStage.getHeight());
@@ -101,7 +77,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         pStage = primaryStage;
-        initPickupButton();
+
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
         ui.add(new Label("Health: "), 0, 0);
@@ -120,10 +96,8 @@ public class Main extends Application {
 
 
         Scene scene = new Scene(borderPane);
-        btn.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            System.out.println("Clicked");
-            borderPane.requestFocus();
-        });
+
+
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
@@ -133,6 +107,8 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
+
+
         setStarterValues();
         maxHorizontal();
         maxVertical();
@@ -227,11 +203,23 @@ public class Main extends Application {
                 }
                 refresh();
                 break;
+            case S:
+                if (keyEvent.isControlDown()){
+                    Modal modal = new Modal();
+                    modal.start(pStage);
+                    System.out.println(modal.getData());
+                }
+                break;
+            case E:
+                map.getPlayer().pickUpItem(map.getPlayer().getCell());
+                updateLabels();
+                borderPane.requestFocus();
+                break;
+
         }
     }
 
     private void refresh() {
-        buttonDisplay();
         borderPane.requestFocus();
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
