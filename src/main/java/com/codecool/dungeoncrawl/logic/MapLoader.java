@@ -1,9 +1,6 @@
 package com.codecool.dungeoncrawl.logic;
 
-import com.codecool.dungeoncrawl.logic.actors.Blup;
-import com.codecool.dungeoncrawl.logic.actors.Ogre;
-import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.actors.Skeleton;
+import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
@@ -64,7 +61,7 @@ public class MapLoader {
                             break;
                         case  'b':
                             cell.setType(CellType.FLOOR);
-                            new Blup(cell, "mainBlup");
+                            new Blup(cell, BlupTypes.MAIN, false);
                             break;
                         case '@':
                             if(!dontPlacePlayerToStarter) {

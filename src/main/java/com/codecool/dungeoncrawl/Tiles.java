@@ -30,10 +30,11 @@ public class Tiles {
         tileMap.put("shrine", new Tile(2, 14));
         tileMap.put("ladder", new Tile(21, 1));
         tileMap.put("hole", new Tile(17, 17));
-        tileMap.put("sword", new Tile(5,5));
-        tileMap.put("food", new Tile(11,11));
+        tileMap.put("sword", new Tile(0,30));
+        tileMap.put("food", new Tile(15,29));
         tileMap.put("ogre", new Tile(30, 6));
         tileMap.put("mainBlup",new Tile(14, 5));
+        tileMap.put("fourWayBlup", new Tile(8,3));
         tileMap.put("upDownBlup",new Tile(12,5));
         tileMap.put("leftRightBlup",new Tile(12, 3));
         tileMap.put("downRightBlup",new Tile(13, 5));
