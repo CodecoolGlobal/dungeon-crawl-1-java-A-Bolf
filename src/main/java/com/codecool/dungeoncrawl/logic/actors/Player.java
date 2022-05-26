@@ -81,6 +81,9 @@ public class Player extends Actor implements CanPickupItems {
 
 
     public void pickUpItem(Cell cell) {
+        if (!cell.hasItem()){
+            return;
+        }
         Item item = cell.getItem();
         if (item.getTileName().equals("food")) {
             consumables.add((Consumable) item);
