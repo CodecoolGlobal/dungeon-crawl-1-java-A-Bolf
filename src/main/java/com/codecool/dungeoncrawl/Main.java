@@ -22,21 +22,28 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.util.List;
 
 import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
 
 public class Main extends Application {
     private int refreshVertical = 0;
+    private static boolean gameOver = false;
     private int refreshHorizontal = 0;
     private int maxrefreshHorizontal = 0;
     private int maxrefreshVertical = 0;
@@ -106,7 +113,7 @@ public class Main extends Application {
         createNewMonsterThread(Skeleton.class, 1000);
         createNewMonsterThread(Ogre.class, 550);
         createNewMonsterThread(Blup.class, 1200);
-        primaryStage.setTitle("Dungeon Crawl");
+        primaryStage.setTitle("(Code) !COOL Game!");
         primaryStage.show();
         borderPane.requestFocus();
         setStarterValues();
@@ -137,108 +144,114 @@ public class Main extends Application {
 
     private void moveAllMonster(Class<?> monsterType) {
         List<Monster> monsters = map.getMonsters(monsterType);
+        if(!gameOver){
         for (Monster monster :
                 monsters) {
             monster.moveMonsters(map.getPlayer());
         }
-        refresh();
+        refresh();}
     }
 
 
     private void onKeyPressed(KeyEvent keyEvent) {
-        boolean collised;
-        switch (keyEvent.getCode()) {
-            case UP:
-                printMe();
-                collised =Player.collised(0, -1);
-                map.getPlayer().move(0, -1);
-                if (passage()) {
-                    changeMap();
-                    break;
-                }
-                if (refreshVertical > 0 && Player.getVertical() * oneSquare < map.getHeight() * oneSquare - windowHeight / 2) {
-                    if (collised) {
-                        refreshVertical--;
+        if(!gameOver) {
+            boolean collised;
+            switch (keyEvent.getCode()) {
+                case UP:
+                    printMe();
+                    collised = Player.collised(0, -1);
+                    map.getPlayer().move(0, -1);
+                    if (passage()) {
+                        changeMap();
+                        break;
                     }
-                }
-                refresh();
-                break;
-            case DOWN:
-                printMe();
-                collised = Player.collised(0, 1);
-                map.getPlayer().move(0, 1);
-                if (passage()) {
-                    changeMap();
-                    break;
-                }
-                if (Player.getVertical() * oneSquare > windowHeight / 2 && refreshVertical < maxrefreshVertical) {
-                    if (collised) {
-                        refreshVertical++;
+                    if (refreshVertical > 0 && Player.getVertical() * oneSquare < map.getHeight() * oneSquare - windowHeight / 2) {
+                        if (collised) {
+                            refreshVertical--;
+                        }
                     }
-                }
-                refresh();
-                break;
-            case LEFT:
-                printMe();
-                collised = Player.collised(-1, 0);
-                map.getPlayer().move(-1, 0);
-                if (passage()) {
-                    changeMap();
+                    refresh();
                     break;
-                }
-                if (refreshHorizontal > 0 && Player.getHorizontal() * oneSquare < map.getWidth() * oneSquare - windowWidth / 2) {
-                    if (collised) {
-                        refreshHorizontal--;
+                case DOWN:
+                    printMe();
+                    collised = Player.collised(0, 1);
+                    map.getPlayer().move(0, 1);
+                    if (passage()) {
+                        changeMap();
+                        break;
                     }
-                }
-                refresh();
-                break;
-            case RIGHT:
-                printMe();
-                collised =Player.collised(1, 0);
-                map.getPlayer().move(1, 0);
-                if (passage()) {
-                    changeMap();
+                    if (Player.getVertical() * oneSquare > windowHeight / 2 && refreshVertical < maxrefreshVertical) {
+                        if (collised) {
+                            refreshVertical++;
+                        }
+                    }
+                    refresh();
                     break;
-                }
-                if (refreshHorizontal <= maxrefreshHorizontal && Player.getHorizontal() * oneSquare > windowWidth / 2) {
-                    if (collised) {
-                        refreshHorizontal++;
+                case LEFT:
+                    printMe();
+                    collised = Player.collised(-1, 0);
+                    map.getPlayer().move(-1, 0);
+                    if (passage()) {
+                        changeMap();
+                        break;
                     }
-                }
-                refresh();
-                break;
-            case S:
-                if (keyEvent.isControlDown()){
-                    Modal modal = new Modal();
-                    modal.start(pStage);
-                    System.out.println(modal.getData());
-                }
-                break;
-            case E:
-                map.getPlayer().pickUpItem(map.getPlayer().getCell());
-                updateLabels();
-                borderPane.requestFocus();
-                break;
+                    if (refreshHorizontal > 0 && Player.getHorizontal() * oneSquare < map.getWidth() * oneSquare - windowWidth / 2) {
+                        if (collised) {
+                            refreshHorizontal--;
+                        }
+                    }
+                    refresh();
+                    break;
+                case RIGHT:
+                    printMe();
+                    collised = Player.collised(1, 0);
+                    map.getPlayer().move(1, 0);
+                    if (passage()) {
+                        changeMap();
+                        break;
+                    }
+                    if (refreshHorizontal <= maxrefreshHorizontal && Player.getHorizontal() * oneSquare > windowWidth / 2) {
+                        if (collised) {
+                            refreshHorizontal++;
+                        }
+                    }
+                    refresh();
+                    break;
+                case S:
+                    if (keyEvent.isControlDown()) {
+                        Modal modal = new Modal();
+                        modal.start(pStage);
+                        System.out.println(modal.getData());
+                    }
+                    break;
+                case E:
+                    map.getPlayer().pickUpItem(map.getPlayer().getCell());
+                    updateLabels();
+                    borderPane.requestFocus();
+                    break;
 
+            }
         }
     }
 
     private void refresh() {
-        borderPane.requestFocus();
-        context.setFill(Color.BLACK);
-        context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x + refreshHorizontal < map.getWidth(); x++) {
-            for (int y = 0; y + refreshVertical < map.getHeight(); y++) {
-                Cell cell = map.getCell(x + refreshHorizontal, y + refreshVertical);
-                if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
-                } else {
-                    Tiles.drawTile(context, cell, x, y);
+        gameOver();
+        if(!gameOver) {
+            borderPane.requestFocus();
+            context.setFill(Color.BLACK);
+            context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            for (int x = 0; x + refreshHorizontal < map.getWidth(); x++) {
+                for (int y = 0; y + refreshVertical < map.getHeight(); y++) {
+                    Cell cell = map.getCell(x + refreshHorizontal, y + refreshVertical);
+                    if (cell.getActor() != null) {
+                        Tiles.drawTile(context, cell.getActor(), x, y);
+                    } else {
+                        Tiles.drawTile(context, cell, x, y);
+                    }
                 }
             }
+            updateLabels();
         }
-        updateLabels();
     }
 
     private void updateLabels() {
@@ -290,13 +303,26 @@ public class Main extends Application {
         refresh();
     }
 
+    public static boolean setGameOver() {
+        return gameOver = true;
+    }
+
     public static byte getMapNow() {
         return mapNow;
     }
 
-    public static void gameOver(){
+    private void gameOver(){
+        if(gameOver){
+           sound.stop();
+           context.setFill(Color.BLACK);
+           context.fillRect(0,0,map.getWidth() * Tiles.TILE_WIDTH,map.getHeight() * Tiles.TILE_WIDTH);
+           context.setStroke(Color.RED);
+           context.setFont(Font.font(35));
+           context.setTextAlign(TextAlignment.CENTER);
+           context.strokeText("Game Over",windowWidth/2,windowHeight/2);
+           Sound.GAME_OVER.play(false);
 
+        }
     }
-
 
 }

@@ -27,6 +27,7 @@ public enum Sound {
     MAP1("/sound/Intro.wav"),
     DEATH("/sound/LegoYodaDeath.wav"),
     BUMP("/sound/Ouch.wav"),
+    GAME_OVER("/sound/gameOver.wav"),
     MAP2("/sound/Underground.wav");
 
 

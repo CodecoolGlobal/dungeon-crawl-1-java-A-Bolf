@@ -5,12 +5,16 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.Sound;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+import java.awt.*;
 
 public abstract class Actor implements Drawable {
     protected Cell cell;
     private int health;
     private int damage;
-
     public Actor(Cell cell, int health, int damage) {
         this.cell = cell;
         this.cell.setActor(this);
@@ -32,13 +36,9 @@ public abstract class Actor implements Drawable {
         cell = null;
         if(this instanceof Player){
             Sound.DEATH.play(false);
-            Main.gameOver();
+            Main.setGameOver();
         }
     }
-
-
-
-
 
 
     public void increaseDamage(int damage) {
