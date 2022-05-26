@@ -3,14 +3,14 @@ package com.codecool.dungeoncrawl.logic;
 import java.util.Objects;
 
 public enum CellType {
-    EMPTY("empty"),
-    FLOOR("floor"),
-    WALL("wall"),
-    SHRINE("shrine"),
-    LADDER("ladder"),
-    ITEM("item"),
-    HOLE("hole"),
-    DOOR("door");
+    EMPTY("empty",' '),
+    FLOOR("floor",'.'),
+    WALL("wall",'#'),
+    SHRINE("shrine",'S'),
+    LADDER("ladder",'l'),
+    ITEM("item",'i'),
+    HOLE("hole",'h'),
+    DOOR("door",'D');
 
     private final String tileName;
 

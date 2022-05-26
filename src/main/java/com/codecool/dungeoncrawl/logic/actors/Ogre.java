@@ -6,11 +6,13 @@ import com.codecool.dungeoncrawl.logic.CellType;
 public class Ogre extends Monster {
     private Cell cell;
     private Actor player;
+    private ActorType type;
 
     public Ogre(Cell cell) {
 
         super(cell, 20, 4);
         this.cell = cell;
+        this.type=ActorType.OGRE;
     }
 
     @Override
@@ -75,6 +77,11 @@ public class Ogre extends Monster {
             cell = nextCell;
             super.cell = nextCell;
         }
+    }
+
+    @Override
+    public char getSymbol() {
+        return this.type.getSymbol();
     }
 
     @Override

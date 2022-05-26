@@ -26,6 +26,33 @@ public class GameMap {
         }
     }
 
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append((width)+" "+(height)+System.lineSeparator());
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                switch (cells[x][y].getType()) {
+                    case FLOOR:
+                        if (cells[x][y].getActor() != null) {
+                            sb.append(cells[x][y].getActor().getSymbol());
+                        } else {
+                            sb.append(CellType.FLOOR.getSymbol());
+                        }
+                        break;
+                    case ITEM:
+                        sb.append(cells[x][y].getItem().getType().getSymbol());
+                        break;
+                    default:
+                        sb.append(cells[x][y].getType().getSymbol());
+                        break;
+                }
+
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
     public Cell getCell(int x, int y) {
         return cells[x][y];
     }

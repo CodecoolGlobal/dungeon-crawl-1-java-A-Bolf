@@ -214,7 +214,9 @@ public class Main extends Application {
 
             case F:
                 try {
-                    SaveHandler.saveGame(currentMap, map.getPlayer());
+                    SaveHandler.saveGame(map);
+                    System.out.println(SaveHandler.gameToString(map.toString(),map.getPlayer()));
+
                 } catch (IOException e) {
                     System.out.println("save failed" + e);
                 }

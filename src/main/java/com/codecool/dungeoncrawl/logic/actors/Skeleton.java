@@ -6,10 +6,17 @@ import java.util.Random;
 
 public class Skeleton extends Monster {
     private Cell cell;
+    private ActorType type;
 
     public Skeleton(Cell cell) {
         super(cell, 10, 2);
         this.cell = cell;
+        this.type=ActorType.SKELETON;
+    }
+
+    @Override
+    public char getSymbol() {
+        return this.type.getSymbol();
     }
 
     private Random random = new Random();

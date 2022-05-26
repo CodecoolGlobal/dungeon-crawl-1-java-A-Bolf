@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SaveHandler {
@@ -71,5 +72,6 @@ public class SaveHandler {
         }
         return inventory;
     }
+
 
 }

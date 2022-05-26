@@ -15,6 +15,7 @@ import java.util.List;
 
 public class Player extends Actor implements CanPickupItems {
     private static Cell cell;
+    private static ActorType type = ActorType.PLAYER;
     private static int vertical;
     private static int horizontal;
     private static List<Item> inventory = new ArrayList<>();
@@ -69,6 +70,20 @@ public class Player extends Actor implements CanPickupItems {
             vertical = vertical + dy;
             horizontal = horizontal + dx;
         }
+    }
+
+    @Override
+    public char getSymbol() {
+        return type.getSymbol();
+    }
+
+
+    public Player(String name, int hp, int x, int y, List<Item> inv){
+        super(cell, hp, 5);
+        this.vertical=x;
+        this.horizontal=y;
+        this.inventory=inv;
+
     }
 
     public static String getInventoryContents() {
