@@ -297,11 +297,9 @@ public class Main extends Application {
     private void changeMap() {
         if (mapNow == 0) {
             map = MapLoader.loadMap("/map3.txt");
-            currentMap = "map3";
             mapNow = 1;
         } else {
             map = MapLoader.loadMap("/map2.txt");
-            currentMap = "map2";
             mapNow = 0;
         }
         maxHorizontal();

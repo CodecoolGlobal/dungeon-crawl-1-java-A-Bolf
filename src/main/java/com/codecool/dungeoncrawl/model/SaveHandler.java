@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl.model;
 
+import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import org.jetbrains.annotations.NotNull;
@@ -32,16 +33,23 @@ public class SaveHandler {
         return new GameState(currentMap, new Date(System.currentTimeMillis()), playermodel);
     }
 
-    public static void saveGame(String currentMap, Player player) throws IOException {
-        GameState gameState = saveGameState(currentMap, player);
+    public static void saveToDB(GameMap map) {
+        String[] gameStrings = gameToString(map.toString(), map.getPlayer());
+        HashMap<String, String> gameSave = new HashMap<>();
+    }
+
+
+    public static void saveGame(GameMap map) throws IOException {
+        GameState gameState = saveGameState(map.toString(), map.getPlayer());
         exportGameState(gameState);
         System.out.println("Game saved");
     }
 
-    public static String gameToString(String currentMap, Player player){
-        GameState gameState=saveGameState(currentMap,player);
-        return gameState.toString();
-
+    public static String[] gameToString(String currentMap, Player player) {
+        String[] save = new String[2];
+        save[0] = saveGameState(currentMap, player).toString();
+        save[1] = saveGameState(currentMap, player).getPlayer().toString();
+        return save;
     }
 
     public static GameState loadGame() {
@@ -62,9 +70,10 @@ public class SaveHandler {
         }
         return stringBuilder.toString();
     }
+
     public static List<Item> inventoryFromString(String inventoryString) {
         List<Item> inventory = new ArrayList<>();
-        inventoryString=inventoryString.replace("[", "").replace("]", "");
+        inventoryString = inventoryString.replace("[", "").replace("]", "");
         String[] inventoryArray = inventoryString.split(",");
         for (String itemString : inventoryArray) {
             Item item = Item.createItemByName(itemString);

@@ -16,7 +16,7 @@ public class PlayerModel extends BaseModel {
     private int y;
     private List<Item> inventory = new ArrayList<>();
 
-    public PlayerModel(String playerName,int hp ,int x, int y) {
+    public PlayerModel(String playerName, int hp, int x, int y) {
         this.playerName = playerName;
         this.x = x;
         this.y = y;
@@ -28,9 +28,10 @@ public class PlayerModel extends BaseModel {
         this.x = player.getX();
         this.y = player.getY();
         this.hp = player.getHealth();
-        this.inventory=player.getInventory();
+        this.inventory = player.getInventory();
 
     }
+
     public List<Item> getInventory() {
         return inventory;
     }
@@ -70,8 +71,17 @@ public class PlayerModel extends BaseModel {
     public static PlayerModel fromString(String playerString) {
         String[] playerData = playerString.split(",");
         PlayerModel playerModel = new PlayerModel(playerData[0], Integer.parseInt(playerData[1]), Integer.parseInt(playerData[2]), Integer.parseInt(playerData[3]));
-        playerModel.inventory=SaveHandler.inventoryFromString(playerData[4]);
+        playerModel.inventory = SaveHandler.inventoryFromString(playerData[4]);
         return playerModel;
+    }
+
+    public String toString(PlayerModel playerModel) {
+        StringBuilder playerString = new StringBuilder();
+        playerString.append(playerModel.getPlayerName()).append(",").append(playerModel.getHp()).append(",").append(playerModel.getX()).append(",").append(playerModel.getY()).append(",");
+        for (Item item : playerModel.getInventory()) {
+            playerString.append(item.getTileName()).append(",");
+        }
+        return playerString.toString();
     }
 
 }

@@ -13,9 +13,11 @@ public enum CellType {
     DOOR("door",'D');
 
     private final String tileName;
+    private final char symbol;
 
-    CellType(String tileName) {
+    CellType(String tileName,char symbol) {
         this.tileName = tileName;
+        this.symbol=symbol;
     }
 
     public String getTileName(Cell cell) {
@@ -26,5 +28,9 @@ public enum CellType {
             return cell.getTileName();
         }
         return tileName;
+    }
+
+    public char getSymbol(){
+        return this.symbol;
     }
 }

@@ -15,7 +15,7 @@ public class GameState extends BaseModel {
         this.currentMap = currentMap;
         this.savedAt = savedAt;
         this.player = player;
-        discoveredMaps.add(currentMap);
+        discoveredMaps.add("1");
     }
 
     public Date getSavedAt() {
@@ -56,10 +56,12 @@ public class GameState extends BaseModel {
             parts[i] = parts[i].split(":")[1];
         }
         GameState gameState = new GameState(parts[1], Date.valueOf(parts[0]), PlayerModel.fromString(parts[3]+","+parts[4]+","+parts[5]+","+parts[6]+","+parts[7]));
-//        gameState.currentMap = parts[1];
-//        gameState.savedAt = Date.valueOf(parts[0]);
-//        gameState.player = new PlayerModel(parts[2], Integer.parseInt(parts[3]), Integer.parseInt(parts[4]));
         gameState.discoveredMaps.addAll(Arrays.asList(parts).subList(5, parts.length));
         return gameState;
+    }
+    public String toString() {
+        return "savedAt:" + savedAt + "," +
+                "currentMap:" + currentMap + "," +
+                "discoveredMaps:" + discoveredMaps + ",";
     }
 }

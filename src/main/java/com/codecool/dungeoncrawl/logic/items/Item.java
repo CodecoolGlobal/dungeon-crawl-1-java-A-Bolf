@@ -37,6 +37,8 @@ public abstract class Item implements Drawable {
         return name;
     }
 
+    public ItemType getType(){return type;}
+
 
 
     public abstract String getTileName();
