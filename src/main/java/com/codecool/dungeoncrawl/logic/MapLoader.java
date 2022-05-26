@@ -5,9 +5,11 @@ import com.codecool.dungeoncrawl.logic.items.Consumable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
 import com.codecool.dungeoncrawl.logic.items.Weapon;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +21,19 @@ public class MapLoader {
     private static boolean dontPlacePlayerToStarter = false;
 
 
-    private void addPlayerFromSave(String name, int hp, int x, int y, List<Item> inventory){
-
-
+    public static void addPlayerFromSave(PlayerModel playermodel, Cell cell) {
+        player = new Player(playermodel.getHp(), playermodel.getX(), playermodel.getY(), playermodel.getInventory(), cell);
 
     }
 
+
     public static GameMap loadMap(String givenMap) {
-        InputStream is = MapLoader.class.getResourceAsStream(givenMap);
+        InputStream is;
+        if (givenMap.toCharArray()[0] != '/') {
+            is = new ByteArrayInputStream(givenMap.getBytes());
+        } else {
+            is = MapLoader.class.getResourceAsStream(givenMap);
+        }
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -57,40 +64,40 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             new Ogre(cell);
                             break;
-                        case  'b':
+                        case 'b':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.MAIN, false);
                             break;
-                        case  '1':
+                        case '1':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.FOUR_WAY, true);
                             break;
-                        case  '2':
+                        case '2':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.UP_DOWN, true);
                             break;
-                        case  '3':
+                        case '3':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.LEFT_RIGHT, true);
                             break;
-                        case  '4':
+                        case '4':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.UP_LEFT, true);
                             break;
-                        case  '5':
+                        case '5':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.DOWN_LEFT, true);
                             break;
-                        case  '6':
+                        case '6':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.UP_RIGHT, true);
                             break;
-                        case  '7':
+                        case '7':
                             cell.setType(CellType.FLOOR);
                             new Blup(cell, BlupTypes.DOWN_RIGHT, true);
                             break;
                         case '@':
-                            if(!dontPlacePlayerToStarter) {
+                            if (!dontPlacePlayerToStarter) {
                                 cell.setType(CellType.FLOOR);
                                 if (player == null) {
                                     player = new Player(cell, y, x);
@@ -99,7 +106,7 @@ public class MapLoader {
                                     player.setStart(cell, y, x);
                                     map.setPlayer(player);
                                 }
-                            }else{
+                            } else {
                                 cell.setType(CellType.FLOOR);
                             }
                             break;
@@ -128,11 +135,11 @@ public class MapLoader {
                             cell.setType(CellType.HOLE);
                             break;
                         case '~':
-                            if(dontPlacePlayerToStarter) {
+                            if (dontPlacePlayerToStarter) {
                                 cell.setType(CellType.FLOOR);
-                                    player.setStart(cell, y, x);
-                                    map.setPlayer(player);
-                            }else{
+                                player.setStart(cell, y, x);
+                                map.setPlayer(player);
+                            } else {
                                 cell.setType(CellType.FLOOR);
                             }
                             break;
@@ -144,6 +151,132 @@ public class MapLoader {
             }
         }
         dontPlacePlayerToStarter = true;
+        return map;
+    }
+
+
+    public static GameMap loadMapFromSave(String givenMap, PlayerModel playermodel) {
+        InputStream is;
+        if (givenMap.toCharArray()[0] != '/') {
+            is = new ByteArrayInputStream(givenMap.getBytes());
+        } else {
+            is = MapLoader.class.getResourceAsStream(givenMap);
+        }
+        Scanner scanner = new Scanner(is);
+        int width = scanner.nextInt();
+        int height = scanner.nextInt();
+
+        scanner.nextLine(); // empty line
+
+        GameMap map = new GameMap(width, height, CellType.EMPTY);
+        for (int y = 0; y < height; y++) {
+            String line = scanner.nextLine();
+            for (int x = 0; x < width; x++) {
+                if (x < line.length()) {
+                    Cell cell = map.getCell(x, y);
+                    switch (line.charAt(x)) {
+                        case ' ':
+                            cell.setType(CellType.EMPTY);
+                            break;
+                        case '#':
+                            cell.setType(CellType.WALL);
+                            break;
+                        case '.':
+                            cell.setType(CellType.FLOOR);
+                            break;
+                        case 's':
+                            cell.setType(CellType.FLOOR);
+                            new Skeleton(cell);
+                            break;
+                        case 'o':
+                            cell.setType(CellType.FLOOR);
+                            new Ogre(cell);
+                            break;
+                        case 'b':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.MAIN, false);
+                            break;
+                        case '1':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.FOUR_WAY, true);
+                            break;
+                        case '2':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.UP_DOWN, true);
+                            break;
+                        case '3':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.LEFT_RIGHT, true);
+                            break;
+                        case '4':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.UP_LEFT, true);
+                            break;
+                        case '5':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.DOWN_LEFT, true);
+                            break;
+                        case '6':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.UP_RIGHT, true);
+                            break;
+                        case '7':
+                            cell.setType(CellType.FLOOR);
+                            new Blup(cell, BlupTypes.DOWN_RIGHT, true);
+                            break;
+                        case '@':
+                            addPlayerFromSave(playermodel,cell);
+                            cell.setType(CellType.FLOOR);
+                            if (player == null) {
+                                player = new Player(cell, y, x);
+                                map.setPlayer(player);
+                            } else {
+                                player.setStart(cell, y, x);
+                                cell.setActor(player);
+                                map.setPlayer(player);
+                            }
+
+                            break;
+                        case 'F':
+                            cell.setType(CellType.ITEM);
+                            cell.setItem(new Consumable(cell));
+                            break;
+                        case 'W':
+                            cell.setType(CellType.ITEM);
+                            cell.setItem(new Weapon(cell));
+                            break;
+                        case 'D':
+                            cell.setType(CellType.DOOR);
+                            break;
+                        case 'K':
+                            cell.setType(CellType.ITEM);
+                            cell.setItem(new Key(cell));
+                            break;
+                        case 'S':
+                            cell.setType(CellType.SHRINE);
+                            break;
+                        case 'l':
+                            cell.setType(CellType.LADDER);
+                            break;
+                        case 'h':
+                            cell.setType(CellType.HOLE);
+                            break;
+                        case '~':
+                            if (dontPlacePlayerToStarter) {
+                                cell.setType(CellType.FLOOR);
+                                player.setStart(cell, y, x);
+                                map.setPlayer(player);
+                            } else {
+                                cell.setType(CellType.FLOOR);
+                            }
+                            break;
+                        default:
+                            throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
+
+                    }
+                }
+            }
+        }
         return map;
     }
 

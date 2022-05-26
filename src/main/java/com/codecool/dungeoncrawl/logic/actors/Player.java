@@ -36,7 +36,9 @@ public class Player extends Actor implements CanPickupItems {
         this.cell = cell;
         this.vertical = vertical;
         this.horizontal = horizontal;
+
     }
+
     public Player(Cell cell, int hp, List<Item> inventory) {
         super(cell, hp, 5);
         this.cell = cell;
@@ -78,25 +80,27 @@ public class Player extends Actor implements CanPickupItems {
     }
 
 
-    public Player(String name, int hp, int x, int y, List<Item> inv){
+    public Player(int hp, int x, int y, List<Item> inv, Cell cell) {
         super(cell, hp, 5);
-        this.vertical=x;
-        this.horizontal=y;
-        this.inventory=inv;
+        this.vertical = x;
+        this.horizontal = y;
+        this.inventory = inv;
 
     }
 
     public static String getInventoryContents() {
         String ret = "";
         for (Item item : inventory) {
-            ret += item.toString() + " ";
+            if (item != null) {
+                ret += item.toString() + " ";
+            }
         }
         return ret;
     }
 
 
     public void pickUpItem(Cell cell) {
-        if (!cell.hasItem()){
+        if (!cell.hasItem()) {
             return;
         }
         Item item = cell.getItem();
@@ -159,6 +163,8 @@ public class Player extends Actor implements CanPickupItems {
     public static int getVertical() {
         return vertical;
     }
+
+
 
     public List<Item> getInventory() {
         return inventory;

@@ -4,6 +4,7 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.codecool.dungeoncrawl.view.Modal;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Item;
@@ -219,9 +220,13 @@ public class Main extends Application {
                 }
                 break;
             case G:
+
                 System.out.println("G");
                 GameState loadedState = SaveHandler.loadGame();
-                restoreGameState(loadedState);
+                PlayerModel player = loadedState.getPlayer();
+
+
+                map=MapLoader.loadMapFromSave(loadedState.getCurrentMap(),player);
                 updateLabels();
                 refresh();
                 break;
@@ -242,13 +247,13 @@ public class Main extends Application {
         }
     }
 
-    private void restoreGameState(GameState gameState) {
-        Cell playercell = map.getCell(gameState.getPlayer().getX(), gameState.getPlayer().getY());
-        int playerHp = gameState.getPlayer().getHp();
-        List<Item> playerItems = gameState.getPlayer().getInventory();
-        map.setPlayer(new Player(playercell, playerHp, playerItems));
-        refresh();
-    }
+//    private void restoreGameState(GameState gameState) {
+//        Cell playercell = map.getCell(gameState.getPlayer().getX(), gameState.getPlayer().getY());
+//        int playerHp = gameState.getPlayer().getHp();
+//        List<Item> playerItems = gameState.getPlayer().getInventory();
+//        MapLoader.addPlayerFromSave(playerHp,);
+//        refresh();
+//    }
 
     private void refresh() {
         borderPane.requestFocus();

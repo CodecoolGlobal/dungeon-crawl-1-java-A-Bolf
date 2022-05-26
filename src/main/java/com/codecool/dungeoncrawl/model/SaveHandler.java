@@ -22,7 +22,7 @@ public class SaveHandler {
     public static void exportGameState(@NotNull GameState gameState) throws IOException {
         File saveFile = new File(SAVE_FILE_PATH_WITH_NAME);
         saveFile.createNewFile();
-        String saveString = gameState.toString();
+        String saveString = gameState.toString()+gameState.getPlayer().toString();
         FileWriter fileWriter = new FileWriter(SAVE_FILE_PATH_WITH_NAME);
         fileWriter.write(saveString);
         fileWriter.close();
@@ -53,7 +53,9 @@ public class SaveHandler {
     }
 
     public static GameState loadGame() {
+
         return GameState.fromString(readSaveFile());
+
     }
 
     private static String readSaveFile() {

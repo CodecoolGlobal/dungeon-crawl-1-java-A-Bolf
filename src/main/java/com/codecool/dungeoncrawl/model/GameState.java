@@ -27,6 +27,7 @@ public class GameState extends BaseModel {
     }
 
     public String getCurrentMap() {
+        System.out.println("MAP "+currentMap);
         return currentMap;
     }
 
@@ -51,12 +52,11 @@ public class GameState extends BaseModel {
     }
 
     public static GameState fromString(String string) {
-        String[] parts = string.split(",");
+        String[] parts = string.split(","  );
         for (int i = 0; i < parts.length; i++) {
             parts[i] = parts[i].split(":")[1];
         }
         GameState gameState = new GameState(parts[1], Date.valueOf(parts[0]), PlayerModel.fromString(parts[3]+","+parts[4]+","+parts[5]+","+parts[6]+","+parts[7]));
-        gameState.discoveredMaps.addAll(Arrays.asList(parts).subList(5, parts.length));
         return gameState;
     }
     public String toString() {
