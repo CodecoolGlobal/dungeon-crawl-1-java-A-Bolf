@@ -64,9 +64,6 @@ public class Main extends Application {
     private GridPane ui = new GridPane();
     private BorderPane borderPane = new BorderPane();
 
-    List<Skeleton> skeletons = MapLoader.getSkeletons();
-    List<Ogre> ogres = MapLoader.getOgres();
-
 
     public static void main(String[] args) {
         launch(args);

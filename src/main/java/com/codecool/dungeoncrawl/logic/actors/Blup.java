@@ -61,6 +61,11 @@ public class Blup extends Monster {
     }
 
     @Override
+    public char getSymbol(){
+        return blupType.getSymbol();
+    }
+
+    @Override
     public void moveMonsters(Player player) {
         grow(player);
     }
