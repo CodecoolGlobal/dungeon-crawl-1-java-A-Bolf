@@ -40,7 +40,7 @@ public class Main extends Application {
     private int refreshHorizontal = 0;
     private int maxrefreshHorizontal = 0;
     private int maxrefreshVertical = 0;
-    private byte mapNow = 0;
+    private static byte mapNow = 0;
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
     private int windowHeight = (int) primaryScreenBounds.getHeight();
     private int windowWidth = (int) primaryScreenBounds.getWidth();
@@ -146,16 +146,18 @@ public class Main extends Application {
 
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        boolean collised;
         switch (keyEvent.getCode()) {
             case UP:
                 printMe();
+                collised =Player.collised(0, -1);
                 map.getPlayer().move(0, -1);
                 if (passage()) {
                     changeMap();
                     break;
                 }
                 if (refreshVertical > 0 && Player.getVertical() * oneSquare < map.getHeight() * oneSquare - windowHeight / 2) {
-                    if (Player.collised(0, -1)) {
+                    if (collised) {
                         refreshVertical--;
                     }
                 }
@@ -163,13 +165,14 @@ public class Main extends Application {
                 break;
             case DOWN:
                 printMe();
+                collised = Player.collised(0, 1);
                 map.getPlayer().move(0, 1);
                 if (passage()) {
                     changeMap();
                     break;
                 }
                 if (Player.getVertical() * oneSquare > windowHeight / 2 && refreshVertical < maxrefreshVertical) {
-                    if (Player.collised(0, 1)) {
+                    if (collised) {
                         refreshVertical++;
                     }
                 }
@@ -177,13 +180,14 @@ public class Main extends Application {
                 break;
             case LEFT:
                 printMe();
+                collised = Player.collised(-1, 0);
                 map.getPlayer().move(-1, 0);
                 if (passage()) {
                     changeMap();
                     break;
                 }
                 if (refreshHorizontal > 0 && Player.getHorizontal() * oneSquare < map.getWidth() * oneSquare - windowWidth / 2) {
-                    if (Player.collised(-1, 0)) {
+                    if (collised) {
                         refreshHorizontal--;
                     }
                 }
@@ -191,13 +195,14 @@ public class Main extends Application {
                 break;
             case RIGHT:
                 printMe();
+                collised =Player.collised(1, 0);
                 map.getPlayer().move(1, 0);
                 if (passage()) {
                     changeMap();
                     break;
                 }
                 if (refreshHorizontal <= maxrefreshHorizontal && Player.getHorizontal() * oneSquare > windowWidth / 2) {
-                    if (Player.collised(1, 0)) {
+                    if (collised) {
                         refreshHorizontal++;
                     }
                 }
@@ -283,6 +288,10 @@ public class Main extends Application {
         maxHorizontal();
         maxVertical();
         refresh();
+    }
+
+    public static byte getMapNow() {
+        return mapNow;
     }
 
     public static void gameOver(){

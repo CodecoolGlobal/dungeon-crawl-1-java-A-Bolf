@@ -22,6 +22,8 @@ public class Player extends Actor implements CanPickupItems {
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private Key key;
+    private byte swordCount = 0;
+    private byte keyCount = 0;
 
     public void setStart(Cell cell, int vertical, int horizontal) {
         this.cell = cell;
@@ -51,8 +53,9 @@ public class Player extends Actor implements CanPickupItems {
                 return;
             }
             if (nextCell.getType() == CellType.DOOR) {
-                if (key != null) {
+                if ((keyCount > (byte)0 && Main.getMapNow()==0 )|| (keyCount > (byte)3 && Main.getMapNow()==(byte)1)) {
                     key.openDoor(nextCell);
+                    Sound.UNLOCK.play(false);
                 } else {
                     Sound.BUMP.play(false);
                     return;
@@ -90,9 +93,11 @@ public class Player extends Actor implements CanPickupItems {
             Sound.APPLE.play(false);
         } else if (item.getTileName().equals("sword")) {
             weapons.add((Weapon) item);
+            swordCount++;
             Sound.SWORD.play(false);
         } else if (item.getTileName().equals("key")) {
             key = (Key) item;
+            keyCount++;
             Sound.KEY.play(false);
         }
         updateStats();
@@ -136,7 +141,13 @@ public class Player extends Actor implements CanPickupItems {
     }
 
     public String getTileName() {
-        return "player";
+        String playerAvatar ="peasant";
+        if (swordCount>1){
+            playerAvatar = "knight";
+        }if(swordCount > 3){
+            playerAvatar="templar";
+        }
+        return playerAvatar;
     }
 
     public static int getHorizontal() {
@@ -146,6 +157,5 @@ public class Player extends Actor implements CanPickupItems {
     public static int getVertical() {
         return vertical;
     }
-
 
 }

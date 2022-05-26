@@ -81,8 +81,6 @@ public class Cell implements Drawable {
         return y;
     }
 
-
-
     public boolean isWalkable() {
         return type == CellType.FLOOR || type == CellType.ITEM || type == CellType.LADDER|| type == CellType.HOLE|| type == CellType.SHRINE|| type == CellType.DOOR;
     }
