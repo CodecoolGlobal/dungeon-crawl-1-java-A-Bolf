@@ -4,6 +4,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 
+import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -34,6 +35,7 @@ import java.util.List;
 import static com.codecool.dungeoncrawl.logic.actors.Player.passage;
 
 public class Main extends Application {
+
     private int refreshVertical = 0;
     private int refreshHorizontal = 0;
     private int maxrefreshHorizontal = 0;
@@ -44,7 +46,7 @@ public class Main extends Application {
     private int windowWidth = (int) primaryScreenBounds.getWidth();
     private int oneSquare = 32;
     private Stage pStage;
-
+    Sound sound = Sound.MAP1;
     GameMap map = MapLoader.loadMap("/map2.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -100,6 +102,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        sound.play(true);
         pStage = primaryStage;
         initPickupButton();
         ui.setPrefWidth(200);
@@ -149,7 +152,6 @@ public class Main extends Application {
         int plusVerticalSpaceBecauseUi = 2;
         maxrefreshVertical = (map.getHeight() * oneSquare - windowHeight) / oneSquare + plusVerticalSpaceBecauseUi;
     }
-
 
     private void createNewMonsterThread(Class<?> monsterType, int frequency){
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(frequency), actionEvent -> {
@@ -279,9 +281,15 @@ public class Main extends Application {
         if (mapNow == 0) {
             map = MapLoader.loadMap("/map3.txt");
             mapNow = 1;
+            sound.stop();
+            sound=Sound.MAP2;
+            sound.play(true);
         } else {
             map = MapLoader.loadMap("/map2.txt");
             mapNow = 0;
+            sound.stop();
+            sound=Sound.MAP1;
+            sound.play(true);
         }
         maxHorizontal();
         maxVertical();
@@ -290,4 +298,10 @@ public class Main extends Application {
         maxVertical();
         refresh();
     }
+
+    public static void gameOver(){
+
+    }
+
+
 }

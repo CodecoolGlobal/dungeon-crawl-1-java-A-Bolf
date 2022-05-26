@@ -1,8 +1,10 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.Main;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
+import com.codecool.dungeoncrawl.logic.Sound;
 
 public abstract class Actor implements Drawable {
     protected Cell cell;
@@ -28,7 +30,16 @@ public abstract class Actor implements Drawable {
     private void die() {
         cell.setActor(null);
         cell = null;
+        if(this instanceof Player){
+            Sound.DEATH.play(false);
+            Main.gameOver();
+        }
     }
+
+
+
+
+
 
     public void increaseDamage(int damage) {
         this.damage += damage;
@@ -61,5 +72,17 @@ public abstract class Actor implements Drawable {
     protected void combat(Actor enemy){
         enemy.damageHealth(damage);
         damageHealth(enemy.getDamage());
+        slashSound(enemy);
     }
+    private void slashSound(Actor enemy){
+        if(enemy instanceof Skeleton){
+            Sound.SWORD_SLASH.play(false);
+        }else if(enemy instanceof Ogre){
+            Sound.SLASH_OGRE.play(false);
+        }else{
+            Sound.SLASH_BLOB.play(false);
+        }
+    }
+
+
 }

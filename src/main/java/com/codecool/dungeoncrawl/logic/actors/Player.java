@@ -1,7 +1,9 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
+import com.codecool.dungeoncrawl.Main;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.Sound;
 import com.codecool.dungeoncrawl.logic.items.Consumable;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Key;
@@ -20,7 +22,6 @@ public class Player extends Actor implements CanPickupItems {
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private Key key;
-
 
     public void setStart(Cell cell, int vertical, int horizontal) {
         this.cell = cell;
@@ -53,6 +54,7 @@ public class Player extends Actor implements CanPickupItems {
                 if (key != null) {
                     key.openDoor(nextCell);
                 } else {
+                    Sound.BUMP.play(false);
                     return;
                 }
             }
@@ -63,6 +65,9 @@ public class Player extends Actor implements CanPickupItems {
             super.cell = nextCell;
             vertical = vertical + dy;
             horizontal = horizontal + dx;
+            Sound.STEP.play(false);
+        }else {
+            Sound.BUMP.play(false);
         }
     }
 
@@ -79,10 +84,13 @@ public class Player extends Actor implements CanPickupItems {
         Item item = cell.getItem();
         if (item.getTileName().equals("food")) {
             consumables.add((Consumable) item);
+            Sound.APPLE.play(false);
         } else if (item.getTileName().equals("sword")) {
             weapons.add((Weapon) item);
+            Sound.SWORD.play(false);
         } else if (item.getTileName().equals("key")) {
             key = (Key) item;
+            Sound.KEY.play(false);
         }
         updateStats();
         cell.removeItem();
@@ -123,7 +131,6 @@ public class Player extends Actor implements CanPickupItems {
         }
         return false;
     }
-
 
     public String getTileName() {
         return "player";
