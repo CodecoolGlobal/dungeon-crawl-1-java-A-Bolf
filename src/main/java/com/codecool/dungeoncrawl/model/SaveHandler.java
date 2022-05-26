@@ -37,6 +37,12 @@ public class SaveHandler {
         System.out.println("Game saved");
     }
 
+    public static String gameToString(String currentMap, Player player){
+        GameState gameState=saveGameState(currentMap,player);
+        return gameState.toString();
+
+    }
+
     public static GameState loadGame() {
         return GameState.fromString(readSaveFile());
     }

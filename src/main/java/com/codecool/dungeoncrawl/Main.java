@@ -1,9 +1,10 @@
 package com.codecool.dungeoncrawl;
 
+
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-
+import com.codecool.dungeoncrawl.view.Modal;
 import com.codecool.dungeoncrawl.logic.actors.*;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.model.GameState;
@@ -62,7 +63,7 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     private GridPane ui = new GridPane();
     private BorderPane borderPane = new BorderPane();
-    Button btn;
+
     List<Skeleton> skeletons = MapLoader.getSkeletons();
     List<Ogre> ogres = MapLoader.getOgres();
 
@@ -70,6 +71,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 
 
     private void printMe() {
@@ -82,6 +85,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         currentMap = "map2";
         pStage = primaryStage;
+
         ui.setPrefWidth(200);
         ui.setPadding(new Insets(10));
         ui.add(new Label("Health: "), 0, 0);
@@ -100,6 +104,8 @@ public class Main extends Application {
 
 
         Scene scene = new Scene(borderPane);
+
+
         primaryStage.setScene(scene);
         refresh();
         scene.setOnKeyPressed(this::onKeyPressed);
@@ -109,6 +115,8 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
         borderPane.requestFocus();
+
+
         setStarterValues();
         maxHorizontal();
         maxVertical();
@@ -210,12 +218,26 @@ public class Main extends Application {
                 } catch (IOException e) {
                     System.out.println("save failed" + e);
                 }
+                break;
             case G:
                 System.out.println("G");
                 GameState loadedState = SaveHandler.loadGame();
                 restoreGameState(loadedState);
                 updateLabels();
                 refresh();
+                break;
+
+            case S:
+                if (keyEvent.isControlDown()){
+                    Modal modal = new Modal();
+                    modal.start(pStage);
+                    System.out.println(modal.getData());
+                }
+                break;
+            case E:
+                map.getPlayer().pickUpItem(map.getPlayer().getCell());
+                updateLabels();
+                borderPane.requestFocus();
                 break;
 
         }
